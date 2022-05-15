@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Speedo Meter</string>
+    <string name="action_settings">Settings</string>
+    <string name="providerStr">STDBY</string>
+    <string name="kmph">" Km/h"</string>
+    <string name="mph">" M/h"</string>
+    <string name="mps">" m/s"</string>
+    <string name="directionNil">NIL</string>
+    <string name="directionNorth">North</string>
+    <string name="directionNE">North-East</string>
+    <string name="directionE">East</string>
+    <string name="directionSE">South-East</string>
+    <string name="directionS">South</string>
+    <string name="directionSW">South-West</string>
+    <string name="directionW">West</string>
+    <string name="directionNW">North-West</string>
+    <string name="directionN">North</string>
+    <string name="directionNA">NA</string>
+    <string name="lat">" lat"</string>
+    <string name="longi">" long"</string>
+    <string name="accuracym">" m"</string>
+</resources>
