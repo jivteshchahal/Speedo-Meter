@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
                 fitSpeed = filter(fitSpeed, localSpeed)
                 val numberFormat = NumberFormat.getNumberInstance()
                 numberFormat.maximumFractionDigits = 0
-                tvSpeed.text = numberFormat.format(speed.toDouble()) + strUnits
+                tvSpeed.text = numberFormat.format(speed.toDouble() * multiplier)  + strUnits
                 tvMaxSpeed.text = "" + maxSpeed.toFloat() * multiplier + strUnits
                 if (location.hasAltitude()) {
                     tvAccuracy.text = numberFormat.format(location.accuracy.toDouble()) + getString(
