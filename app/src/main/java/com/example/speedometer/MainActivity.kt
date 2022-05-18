@@ -6,9 +6,11 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.*
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDialog
 import androidx.core.app.ActivityCompat
 import java.text.NumberFormat
 import java.util.*
@@ -25,11 +27,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvDirection: TextView
     private lateinit var tvLat: TextView
     private lateinit var tvLong: TextView
+    private lateinit var tvUnits: TextView
     private lateinit var btnRGroup: RadioGroup
     private lateinit var btnReset: Button
+    private lateinit var btnAbout: ImageButton
     var multiplier = 3.6f
     var strUnits = ""
 
+    @SuppressLint("InvalidWakeLockTag")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -40,8 +45,10 @@ class MainActivity : AppCompatActivity() {
         tvDirection = findViewById(R.id.tvDirection)
         tvLat = findViewById(R.id.tvLat)
         tvLong = findViewById(R.id.tvLong)
+        tvUnits = findViewById(R.id.tvUnits)
         btnRGroup = findViewById(R.id.btnRadioGroup)
         btnReset =findViewById(R.id.btnReset)
+        btnAbout =findViewById(R.id.btnAbout)
         locationPermission()
         strUnits =getString(R.string.kmph)
         getLocation()
@@ -70,7 +77,10 @@ class MainActivity : AppCompatActivity() {
             findViewById<RadioButton>(R.id.btnRbKmh).isChecked = true
             getLocation()
         }
-
+        btnAbout.setOnClickListener{
+            showDialog()
+        }
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun getLocation() {
@@ -89,8 +99,9 @@ class MainActivity : AppCompatActivity() {
                 fitSpeed = filter(fitSpeed, localSpeed)
                 val numberFormat = NumberFormat.getNumberInstance()
                 numberFormat.maximumFractionDigits = 0
-                tvSpeed.text = numberFormat.format(speed.toDouble() * multiplier)  + strUnits
-                tvMaxSpeed.text = "" + maxSpeed.toFloat() * multiplier + strUnits
+                tvUnits.text = strUnits
+                tvSpeed.text = numberFormat.format(speed.toDouble() * multiplier)
+                tvMaxSpeed.text = "%.3f".format(maxSpeed* multiplier)  + strUnits
                 if (location.hasAltitude()) {
                     tvAccuracy.text = numberFormat.format(location.accuracy.toDouble()) + getString(
                         R.string.accuracym)
@@ -188,11 +199,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
                     // Only approximate location access granted.
-                    Toast.makeText(this,"Fine location needed for accurate data",Toast.LENGTH_LONG).show()
+                    Toast.makeText(this,getString(R.string.toastCourseLoc),Toast.LENGTH_LONG).show()
                 }
                 else -> {
                     // No location access granted.
-                    Toast.makeText(this,"Location access needed for the App",Toast.LENGTH_LONG).show()
+                    Toast.makeText(this,getString(R.string.toastNoPermission),Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -205,5 +216,16 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             )
         )
+    }
+    @Throws(PackageManager.NameNotFoundException::class)
+    private fun showDialog() {
+        val dialog = AppCompatDialog(this)
+        dialog.setContentView(R.layout.about_dialog)
+        dialog.setTitle(
+            "About Speedometer "
+                    + packageManager.getPackageInfo(packageName, 0).versionName
+        )
+        dialog.setCancelable(true)
+        dialog.show()
     }
 }
