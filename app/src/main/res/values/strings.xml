@@ -95,5 +95,18 @@ The following definitions shall have the same meaning regardless of whether they
 </ul> </string>
     <string name="gps_not_found_message">This app requires Location Service.\n\n Please enable Location Service now?\n</string>
     <string name="gps_not_found_title">GPS Not Enabled</string>
+    <string name="reset">Reset</string>
+    <string name="m_s">m/s</string>
+    <string name="m_h">M/h</string>
+    <string name="km_h">Km/h</string>
+    <string name="loading">loading…</string>
+    <string name="max_speed">Max Speed</string>
+    <string name="maxSpeed">Max Speed:</string>
+    <string name="direction">Direction</string>
+    <string name="direction1">Direction:</string>
+    <string name="accuracy">Accuracy</string>
+    <string name="accuracy1">Accuracy:</string>
+    <string name="current_location">Current Location</string>
+    <string name="_100">100</string>
 
 </resources>
