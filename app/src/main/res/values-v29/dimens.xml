@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tvSplash_text_size_min">40dp</dimen>
+    <dimen name="tvSplash_text_size_max">72sp</dimen>
+    <dimen name="top_speedometer_text_max">72sp</dimen>
+</resources>
