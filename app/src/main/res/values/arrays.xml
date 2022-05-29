@@ -1,12 +1,34 @@
 <resources>
     <!-- Reply Preference -->
-    <string-array name="reply_entries">
-        <item>Reply</item>
-        <item>Reply to all</item>
-    </string-array>
 
-    <string-array name="reply_values">
-        <item>reply</item>
-        <item>reply_all</item>
+    <string-array name="speedFont">
+        <item>Harry Potter</item>
+        <item>new1</item>
+        <item>new2</item>
+    </string-array>
+    <string-array name="speedFontAlias">
+        <item>hp</item>
+        <item>n1</item>
+        <item>n2</item>
+    </string-array>
+    <string-array name="appFont">
+        <item>Harry Potter</item>
+        <item>new1</item>
+        <item>new2</item>
+    </string-array>
+    <string-array name="appFontAlias">
+        <item>hp</item>
+        <item>n1</item>
+        <item>n2</item>
+    </string-array>
+    <string-array name="unitType">
+        <item>Km/h</item>
+        <item>M/h</item>
+        <item>m/s</item>
+    </string-array>
+    <string-array name="unitTypeAlias">
+        <item>Km/h</item>
+        <item>M/h</item>
+        <item>m/s</item>
     </string-array>
 </resources>

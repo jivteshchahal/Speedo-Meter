@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">SpeedoMeter</string>
-    <string name="action_settings">Settings</string>
     <string name="providerStr">STDBY</string>
     <string name="kmph">" Km/h"</string>
     <string name="mph">" M/h"</string>
@@ -16,27 +15,22 @@
     <string name="directionNW">North-West</string>
     <string name="directionN">North</string>
     <string name="directionNA">NA</string>
-    <string name="lat">" lat"</string>
-    <string name="longi">" long"</string>
+    <string name="lat">" Lat"</string>
+    <string name="longi">" Long"</string>
     <string name="accuracym">" m"</string>
     <string name="toastCourseLoc">Fine location needed for accurate data</string>
     <string name="toastNoPermission">Location access needed for the App</string>
     <!-- Preference Titles -->
-    <string name="font_header">Font Change</string>
-    <string name="sync_header">Sync</string>
 
-    <!-- Messages Preferences -->
+    <!-- Font Preferences -->
     <string name="Font_title">Change Font</string>
-    <string name="reply_title">Default reply action</string>
 
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Theme Preferences -->
+    <string name="app_theme">App Theme</string>
+    <string name="app_theme_dark">Dark Mode</string>
+    <string name="app_font">App Font</string>
+    <string name="speed_font">Speed Font</string>
+
     <string name="licence"> <h1>Disclaimer</h1>
 <p>Last updated: May 18, 2022</p>
 <h1>Interpretation and Definitions</h1>
@@ -87,14 +81,12 @@ The following definitions shall have the same meaning regardless of whether they
 <p>If you have any questions about this Disclaimer, You can contact Us:</p>
 <ul>
 <li>
-<p>By email: jivteshchahal@gmail.com</p>
+    <p>By email: <a href="mailto:jivteshchahal@gmail.com">jivteshchahal@gmail.com</a></p>
 </li>
 <li>
 <p>By visiting this page on our website: <a href="https://github.com/jivteshchahal/Speedo-Meter" rel="external nofollow noopener" target="_blank">https://github.com/jivteshchahal/Speedo-Meter</a></p>
 </li>
 </ul> </string>
-    <string name="gps_not_found_message">This app requires Location Service.\n\n Please enable Location Service now?\n</string>
-    <string name="gps_not_found_title">GPS Not Enabled</string>
     <string name="reset">Reset</string>
     <string name="m_s">m/s</string>
     <string name="m_h">M/h</string>
@@ -102,11 +94,23 @@ The following definitions shall have the same meaning regardless of whether they
     <string name="loading">loading…</string>
     <string name="max_speed">Max Speed</string>
     <string name="maxSpeed">Max Speed:</string>
-    <string name="direction">Direction</string>
+    <string name="direction">loading</string>
     <string name="direction1">Direction:</string>
-    <string name="accuracy">Accuracy</string>
+    <string name="accuracy">NA</string>
     <string name="accuracy1">Accuracy:</string>
     <string name="current_location">Current Location</string>
     <string name="_100">100</string>
+    <string name="app_unit_type">App Unit Type</string>
+    <string name="unit_type">Unit type</string>
+    <string name="threedpoint">%.3f</string>
+    <string name="dialog_internet">No Internet Connection Available. Check network connections and restart the app.</string>
+    <string name="btn_about">about button</string>
+    <string name="btn_settings">settings fragment</string>
+    <string name="speedometer_logo">Speedometer logo</string>
+    <string name="speedometer_splash_logo">speedometer splash logo</string>
+
+    <!-- Preference Titles -->
+
+    <!-- Messages Preferences -->
 
 </resources>

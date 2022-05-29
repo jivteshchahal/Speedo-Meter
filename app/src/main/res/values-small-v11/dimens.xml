@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="speed_text_size"> 400sp </dimen>
     <dimen name="km_text_size"> 34sp </dimen>
@@ -37,6 +38,4 @@
     <dimen name="tvSplash_text_size_min">40dp</dimen>
     <dimen name="tvSplash_text_size_max">72sp</dimen>
     <dimen name="top_speedometer_text_max">72sp</dimen>
-    <dimen name="tv_speed_max">700sp</dimen>
-    <dimen name="tv_speed_min">280sp</dimen>
 </resources>

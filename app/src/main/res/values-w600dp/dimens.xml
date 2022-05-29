@@ -1,3 +1,7 @@
 <resources>
-    <dimen name="fab_margin">48dp</dimen>
+    <dimen name="top_speedometer_text_min">28sp</dimen>
+    <dimen name="top_speedometer_text">80sp</dimen>
+    <dimen name="tvSplash_text_size_min">50dp</dimen>
+    <dimen name="tvSplash_text_size_max">80sp</dimen>
+    <dimen name="top_speedometer_text_max">72sp</dimen>
 </resources>

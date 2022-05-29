@@ -5,12 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="com.chahal.speedometer.MainActivity">
     <!-- res/layout/example_activity.xml -->
-<!--    <androidx.fragment.app.FragmentContainerView-->
-<!--        android:id="@+id/fragment_container_view"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content" >-->
+    <!--    <androidx.fragment.app.FragmentContainerView-->
+    <!--        android:id="@+id/fragment_container_view"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content" >-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -28,28 +28,46 @@
                 android:id="@+id/tvSpeedometer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/tvSpeedometer_margin_top"
+                android:autoSizeMaxTextSize="@dimen/top_speedometer_text_max"
+                android:autoSizeMinTextSize="@dimen/top_speedometer_text_min"
+                android:maxLines="1"
                 android:text="@string/app_name"
-                android:textSize="48sp"
+                android:textAlignment="center"
+                android:textSize="@dimen/top_speedometer_text"
                 app:layout_constraintBottom_toTopOf="@+id/tvSpeed"
-                app:layout_constraintEnd_toStartOf="@+id/btnAbout"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/btnAbout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/btnAbout_margin_start"
+                android:layout_marginTop="24dp"
+                android:background="@mipmap/ic_launcher_round"
+                android:backgroundTintMode="screen"
+                android:contentDescription="@string/btn_about"
+                android:scaleType="fitStart"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/tvSpeed"
+                app:layout_constraintStart_toEndOf="@+id/tvSpeedometer"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvSpeed"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:autoSizeMaxTextSize="400sp"
-                android:autoSizeMinTextSize="250sp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autoSizeMaxTextSize="@dimen/tv_speed_max"
+                android:autoSizeMinTextSize="@dimen/tv_speed_min"
                 android:autoSizeStepGranularity="2sp"
                 android:autoSizeTextType="uniform"
                 android:fontFamily="@font/texazgxxaq"
                 android:maxLines="1"
                 android:text="@string/_100"
                 android:textAlignment="center"
-                android:textSize="400sp"
+                android:textSize="@dimen/speed_text_size"
                 app:layout_constraintBottom_toTopOf="@+id/tvCurrentLocation"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +79,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/km_h"
                 android:textAlignment="center"
-                android:textSize="24sp"
+                android:textAllCaps="false"
+                android:textSize="@dimen/km_text_size"
                 android:textStyle="bold"
                 android:visibility="visible"
                 app:layout_constraintBottom_toTopOf="@+id/tvCurrentLocation"
@@ -72,31 +91,16 @@
                 android:id="@+id/tvCurrentLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="@dimen/tvCurrentLocation_margin_bottom"
+                android:maxLines="2"
                 android:text="@string/current_location"
                 android:textAlignment="center"
-                android:textSize="20sp"
-                android:maxLines="2"
-                android:lines="2"
+                android:textSize="@dimen/location_text_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvSpeed" />
 
-            <ImageButton
-                android:id="@+id/btnAbout"
-                android:contentDescription="@string/app_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="28dp"
-                android:background="@android:drawable/ic_dialog_info"
-                android:backgroundTint="@color/common_google_signin_btn_text_light_default"
-                android:backgroundTintMode="screen"
-                app:layout_constraintBottom_toTopOf="@+id/tvSpeed"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvSpeedometer"
-                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -111,12 +115,12 @@
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:maxLines="1"
                 android:text="@string/accuracy1"
                 android:textAlignment="viewEnd"
-                android:textSize="24sp"
+                android:textSize="@dimen/accuracy_text_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/tvAccuracy"
                 app:layout_constraintStart_toStartOf="parent"
@@ -124,25 +128,26 @@
 
             <TextView
                 android:id="@+id/tvAccuracy"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/tvAccuracy_margin_start"
+                android:maxLines="1"
                 android:text="@string/accuracy"
-                android:textAlignment="textStart"
-                android:textSize="24sp"
+                android:textSize="@dimen/accuracy_text_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/textView3"
                 app:layout_constraintStart_toEndOf="@+id/textView2"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginStart="16dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/textView3_margin_start"
+                android:layout_marginEnd="@dimen/textView3_margin_end"
+                android:maxLines="1"
                 android:text="@string/direction1"
-                android:textSize="24sp"
+                android:textSize="@dimen/direction_text_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/tvDirection"
                 app:layout_constraintHorizontal_bias="0.36"
@@ -153,12 +158,11 @@
             <TextView
                 android:id="@+id/tvDirection"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
                 android:text="@string/direction"
                 android:textAlignment="viewStart"
-                android:textSize="24sp"
+                android:textSize="@dimen/direction_text_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView3"
@@ -170,7 +174,7 @@
             android:id="@+id/maxSpeedLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/maxSpeedLayout_margin_top"
             app:layout_constraintBottom_toTopOf="@+id/latLongLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -182,7 +186,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/maxSpeed"
                 android:textAlignment="viewEnd"
-                android:textSize="24sp"
+                android:textSize="@dimen/max_speed_text_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/tvMaxSpeed"
                 app:layout_constraintStart_toStartOf="parent"
@@ -192,11 +196,12 @@
                 android:id="@+id/tvMaxSpeed"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="@dimen/tvMaxSpeed_margin_start"
                 android:text="@string/max_speed"
-                android:textColor="#f54b42"
                 android:textAlignment="viewStart"
-                android:textSize="24sp"
+                android:textColor="#f54b42"
+                android:textSize="@dimen/max_speed_text_size"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView4"
@@ -209,7 +214,7 @@
             android:id="@+id/latLongLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/latLongLayout_margin_top"
             app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -221,6 +226,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:text="@string/loading"
+                android:textSize="@dimen/lat_long_text_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/tvLong"
                 app:layout_constraintStart_toStartOf="parent"
@@ -232,6 +238,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="@string/loading"
+                android:textSize="@dimen/lat_long_text_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvLat"
@@ -241,8 +248,10 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/constraintLayout_margin_bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/latLongLayout">
@@ -264,6 +273,7 @@
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="@string/km_h"
+                    android:textSize="@dimen/radio_button_size"
                     tools:layout_editor_absoluteX="106dp"
                     tools:layout_editor_absoluteY="644dp" />
 
@@ -271,13 +281,15 @@
                     android:id="@+id/btnRbMh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/m_h" />
+                    android:text="@string/m_h"
+                    android:textSize="@dimen/radio_button_size" />
 
                 <RadioButton
                     android:id="@+id/btnRbMs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/m_s"
+                    android:textSize="@dimen/radio_button_size"
                     tools:layout_editor_absoluteX="236dp"
                     tools:layout_editor_absoluteY="645dp" />
             </RadioGroup>
@@ -286,14 +298,39 @@
                 android:id="@+id/btnReset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
+                android:layout_marginBottom="8dp"
                 android:text="@string/reset"
+                android:textSize="@dimen/reset_button_size"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnSettings"
+                app:layout_constraintStart_toEndOf="@+id/textView7"
+                app:layout_constraintTop_toBottomOf="@+id/btnRadioGroup" />
+
+            <ImageButton
+                android:id="@+id/btnSettings"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="24dp"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.467"
+                app:layout_constraintStart_toEndOf="@+id/btnReset"
+                app:layout_constraintTop_toBottomOf="@+id/btnRadioGroup"
+                app:srcCompat="@android:drawable/ic_menu_preferences"
+                android:contentDescription="@string/btn_settings" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="31dp"
+                app:layout_constraintEnd_toStartOf="@+id/btnReset"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btnRadioGroup" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-<!--    </androidx.fragment.app.FragmentContainerView>-->
+    <!--    </androidx.fragment.app.FragmentContainerView>-->
 </ScrollView>

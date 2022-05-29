@@ -5,8 +5,10 @@
       <map>
         <entry key="..\:/Users/jivte/AndroidStudioProjects/SpeedoMeter/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.137" />
         <entry key="..\:/Users/jivte/AndroidStudioProjects/SpeedoMeter/app/src/main/res/drawable/ic_launcher_background.xml" value="0.137" />
-        <entry key="..\:/Users/jivte/AndroidStudioProjects/SpeedoMeter/app/src/main/res/layout/about_dialog.xml" value="0.2604166666666667" />
-        <entry key="..\:/Users/jivte/AndroidStudioProjects/SpeedoMeter/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/jivte/AndroidStudioProjects/SpeedoMeter/app/src/main/res/layout/about_dialog.xml" value="0.264" />
+        <entry key="..\:/Users/jivte/AndroidStudioProjects/SpeedoMeter/app/src/main/res/layout/activity_main.xml" value="0.1482905982905983" />
+        <entry key="..\:/Users/jivte/AndroidStudioProjects/SpeedoMeter/app/src/main/res/layout/activity_splash.xml" value="0.2713541666666667" />
+        <entry key="..\:/Users/jivte/AndroidStudioProjects/SpeedoMeter/app/src/main/res/layout/fragment_about.xml" value="0.1265625" />
         <entry key="..\:/Users/jivte/AndroidStudioProjects/SpeedoMeter/app/src/main/res/layout/fragment_main.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/jivte/AndroidStudioProjects/SpeedoMeter/app/src/main/res/layout/fragment_settings.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/jivte/AndroidStudioProjects/SpeedoMeter/app/src/main/res/xml/root_preferences.xml" value="0.27447916666666666" />
@@ -18,5 +20,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.264" />
+      </ProjectState>
+    </option>
   </component>
 </project>

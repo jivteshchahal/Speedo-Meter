@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="speed_text_size"> 400sp </dimen>
     <dimen name="km_text_size"> 34sp </dimen>
@@ -7,7 +8,7 @@
     <dimen name="max_speed_text_size"> 24sp </dimen>
     <dimen name="lat_long_text_size"> 20sp </dimen>
     <dimen name="radio_button_size"> 16sp </dimen>
-    <dimen name="top_speedometer_text">48sp </dimen>
+    <dimen name="top_speedometer_text">80sp </dimen>
     <dimen name="about_icon_size"> 36dp </dimen>
     <dimen name="reset_button_size"> 16sp </dimen>
     <dimen name="tvSpeedometer_margin_top"> 16dp </dimen>
@@ -33,10 +34,8 @@
     <dimen name="iVSplash_margin_top">16dp</dimen>
     <dimen name="iVSplash_margin_end">8dp</dimen>
     <dimen name="progressBar_margin_top">8dp</dimen>
-    <dimen name="top_speedometer_text_min">28sp</dimen>
+    <dimen name="top_speedometer_text_min">72sp</dimen>
     <dimen name="tvSplash_text_size_min">40dp</dimen>
     <dimen name="tvSplash_text_size_max">72sp</dimen>
-    <dimen name="top_speedometer_text_max">72sp</dimen>
-    <dimen name="tv_speed_max">700sp</dimen>
-    <dimen name="tv_speed_min">280sp</dimen>
+    <dimen name="top_speedometer_text_max">80sp</dimen>
 </resources>

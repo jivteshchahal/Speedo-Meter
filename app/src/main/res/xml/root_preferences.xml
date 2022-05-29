@@ -1,0 +1,34 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="App Settings">
+
+        <ListPreference
+            android:entries="@array/speedFont"
+            android:entryValues="@array/speedFontAlias"
+            app:key="Speed_Font"
+            app:title="@string/speed_font" />
+        <EditTextPreference
+            android:entries="@array/appFont"
+            android:entryValues="@array/appFontAlias"
+            app:key="App Font"
+            app:title="@string/app_font" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/app_theme">
+
+        <SwitchPreferenceCompat
+            app:key="App_Theme"
+            app:title="@string/app_theme_dark" />
+    </PreferenceCategory>
+    <PreferenceCategory app:title="@string/app_unit_type">
+
+        <ListPreference
+            android:entries="@array/unitType"
+            android:entryValues="@array/unitTypeAlias"
+            app:key="Unit_Type"
+            app:title="@string/unit_type" />
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

@@ -1,17 +1,20 @@
-package com.example.speedometer
+package com.chahal.speedometer
 
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.*
+import android.net.ConnectivityManager
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDialog
 import androidx.core.app.ActivityCompat
+import java.io.IOException
 import java.text.NumberFormat
 import java.util.*
 
@@ -19,6 +22,7 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     var speed = 0.0f
     private var maxSpeed = -100.0
+    private val unit = arrayOf("km/h", "mph", "meter/sec", "knots")
     private var locationManager: LocationManager? = null
     private lateinit var tvCurrentLocation: TextView
     private lateinit var tvAccuracy: TextView
@@ -31,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnRGroup: RadioGroup
     private lateinit var btnReset: Button
     private lateinit var btnAbout: ImageButton
+    private lateinit var btnSettings: ImageButton
     var multiplier = 3.6f
     var strUnits = ""
 
@@ -47,11 +52,15 @@ class MainActivity : AppCompatActivity() {
         tvLong = findViewById(R.id.tvLong)
         tvUnits = findViewById(R.id.tvUnits)
         btnRGroup = findViewById(R.id.btnRadioGroup)
-        btnReset =findViewById(R.id.btnReset)
-        btnAbout =findViewById(R.id.btnAbout)
+        btnReset = findViewById(R.id.btnReset)
+        btnAbout = findViewById(R.id.btnAbout)
+        btnSettings = findViewById(R.id.btnSettings)
         locationPermission()
-        strUnits =getString(R.string.kmph)
-        getLocation()
+        strUnits = getString(R.string.kmph)
+        checkNetworkConnections()
+        btnSettings.setOnClickListener {
+//            supportFragmentManager.beginTransaction().replace(android.R.id.content, SettingsFragment2()).commit()
+        }
         btnRGroup.setOnCheckedChangeListener { _, checkedId ->
             run {
                 when (checkedId) {
@@ -70,17 +79,30 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        btnReset.setOnClickListener{
-            strUnits =getString(R.string.kmph)
+        btnReset.setOnClickListener {
+            strUnits = getString(R.string.kmph)
             speed = 0.0f
-            maxSpeed =-100.0
+            maxSpeed = -100.0
             findViewById<RadioButton>(R.id.btnRbKmh).isChecked = true
-            getLocation()
+            checkNetworkConnections()
         }
-        btnAbout.setOnClickListener{
-            showDialog()
+        btnAbout.setOnClickListener {
+            showDialog(true)
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
+    private fun checkNetworkConnections() {
+        if(isNetworkConnected()) {
+            if(isInternetAvailable()) {
+                getLocation()
+            }else{
+                showDialog(false)
+                getLocation()
+            }
+        }else{
+            showDialog(false)
+        }
     }
 
     private fun getLocation() {
@@ -101,10 +123,12 @@ class MainActivity : AppCompatActivity() {
                 numberFormat.maximumFractionDigits = 0
                 tvUnits.text = strUnits
                 tvSpeed.text = numberFormat.format(speed.toDouble() * multiplier)
-                tvMaxSpeed.text = "%.3f".format(maxSpeed* multiplier)  + strUnits
+                tvMaxSpeed.text =
+                    getString(R.string.threedpoint).format(maxSpeed * multiplier) + strUnits
                 if (location.hasAltitude()) {
                     tvAccuracy.text = numberFormat.format(location.accuracy.toDouble()) + getString(
-                        R.string.accuracym)
+                        R.string.accuracym
+                    )
                 } else {
                     tvAccuracy.text = getString(R.string.directionNil)
                 }
@@ -199,11 +223,13 @@ class MainActivity : AppCompatActivity() {
                 }
                 permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
                     // Only approximate location access granted.
-                    Toast.makeText(this,getString(R.string.toastCourseLoc),Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.toastCourseLoc), Toast.LENGTH_LONG)
+                        .show()
                 }
                 else -> {
                     // No location access granted.
-                    Toast.makeText(this,getString(R.string.toastNoPermission),Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.toastNoPermission), Toast.LENGTH_LONG)
+                        .show()
                 }
             }
         }
@@ -217,15 +243,40 @@ class MainActivity : AppCompatActivity() {
             )
         )
     }
+
+    @SuppressLint("SetTextI18n")
     @Throws(PackageManager.NameNotFoundException::class)
-    private fun showDialog() {
+    private fun showDialog(flag:Boolean) {
         val dialog = AppCompatDialog(this)
         dialog.setContentView(R.layout.about_dialog)
+
+        val tvAppName: TextView? = dialog.findViewById(R.id.tvAppName)
+        val tvDescription: TextView? =dialog.findViewById(R.id.tvDialogDes)
+        if (tvAppName != null) {
+            tvAppName.text = getString(R.string.app_name)+ " " + packageManager.getPackageInfo(packageName, 0).versionName
+        }
         dialog.setTitle(
             "About Speedometer "
                     + packageManager.getPackageInfo(packageName, 0).versionName
         )
+        if(flag){
+//            tvDescription!!.text = getString(R.string.licence)
+        }else{
+            tvDescription!!.textAlignment = View.TEXT_ALIGNMENT_CENTER
+//            tvDescription.height =
+            tvDescription.text = getString(R.string.dialog_internet)
+        }
         dialog.setCancelable(true)
         dialog.show()
+    }
+    private fun isNetworkConnected(): Boolean {
+        val cm = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        return cm.activeNetworkInfo != null && cm.activeNetworkInfo!!.isConnected
+    }
+
+    @Throws(InterruptedException::class, IOException::class)
+    fun isInternetAvailable(): Boolean {
+        val command = "ping -c 1 google.com"
+        return Runtime.getRuntime().exec(command).waitFor() == 0
     }
 }

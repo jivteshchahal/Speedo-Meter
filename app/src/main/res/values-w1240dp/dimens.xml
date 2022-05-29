@@ -1,3 +1,4 @@
 <resources>
-    <dimen name="fab_margin">200dp</dimen>
+    <dimen name="tvSplash_text_size_max">72sp</dimen>
+    <dimen name="top_speedometer_text_max">72sp</dimen>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.speedometer
+package com.chahal.speedometer
 
 import org.junit.Test
 
