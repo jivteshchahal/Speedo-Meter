@@ -104,8 +104,8 @@ The following definitions shall have the same meaning regardless of whether they
     <string name="unit_type">Unit type</string>
     <string name="threedpoint">%.3f</string>
     <string name="dialog_internet">No Internet Connection Available. Check network connections and restart the app.</string>
-    <string name="btn_about">about button</string>
-    <string name="btn_settings">settings fragment</string>
+    <string name="btn_about">about</string>
+    <string name="btn_settings">settings</string>
     <string name="speedometer_logo">Speedometer logo</string>
     <string name="speedometer_splash_logo">speedometer splash logo</string>
 

@@ -17,8 +17,9 @@ class SplashActivity : AppCompatActivity() {
         val progressBar =findViewById<ProgressBar>(R.id.progressBar)
         progressBar.progress = 0
         Handler(Looper.myLooper()!!).postDelayed({
+            progressBar.progress = 50
+            val mainIntent = Intent(applicationContext, MainActivity::class.java)
             progressBar.progress = 100
-            val mainIntent = Intent(this, MainActivity::class.java)
             startActivity(mainIntent)
             finish()
         }, 2000)

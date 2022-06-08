@@ -19,10 +19,10 @@ import java.text.NumberFormat
 import java.util.*
 
 
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
     var speed = 0.0f
     private var maxSpeed = -100.0
-    private val unit = arrayOf("km/h", "mph", "meter/sec", "knots")
     private var locationManager: LocationManager? = null
     private lateinit var tvCurrentLocation: TextView
     private lateinit var tvAccuracy: TextView
@@ -263,7 +263,6 @@ class MainActivity : AppCompatActivity() {
 //            tvDescription!!.text = getString(R.string.licence)
         }else{
             tvDescription!!.textAlignment = View.TEXT_ALIGNMENT_CENTER
-//            tvDescription.height =
             tvDescription.text = getString(R.string.dialog_internet)
         }
         dialog.setCancelable(true)

@@ -34,7 +34,7 @@
     <dimen name="iVSplash_margin_top">16dp</dimen>
     <dimen name="iVSplash_margin_end">8dp</dimen>
     <dimen name="progressBar_margin_top">8dp</dimen>
-    <dimen name="top_speedometer_text_min">28sp</dimen>
+    <dimen name="top_speedometer_text_min">18sp</dimen>
     <dimen name="tvSplash_text_size_min">40dp</dimen>
     <dimen name="tvSplash_text_size_max">72sp</dimen>
     <dimen name="top_speedometer_text_max">72sp</dimen>
