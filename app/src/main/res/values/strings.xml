@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">SpeedoMeter</string>
     <string name="providerStr">STDBY</string>
-    <string name="kmph">" Km/h"</string>
-    <string name="mph">" M/h"</string>
-    <string name="mps">" m/s"</string>
+    <string name="kmph">"Km/h"</string>
+    <string name="mph">"M/h"</string>
+    <string name="mps">"m/s"</string>
     <string name="directionNil">NIL</string>
     <string name="directionNorth">North</string>
     <string name="directionNE">North-East</string>
@@ -15,6 +15,16 @@
     <string name="directionNW">North-West</string>
     <string name="directionN">North</string>
     <string name="directionNA">NA</string>
+    <string name="directionSNorth">N</string>
+    <string name="directionSNE">N-E</string>
+    <string name="directionSsE">E</string>
+    <string name="directionSSE">S-E</string>
+    <string name="directionSS">S</string>
+    <string name="directionSSW">S-W</string>
+    <string name="directionSsW">W</string>
+    <string name="directionSNW">N-W</string>
+    <string name="directionSN">N</string>
+
     <string name="lat">" Lat"</string>
     <string name="longi">" Long"</string>
     <string name="accuracym">" m"</string>
@@ -108,6 +118,25 @@ The following definitions shall have the same meaning regardless of whether they
     <string name="btn_settings">settings</string>
     <string name="speedometer_logo">Speedometer logo</string>
     <string name="speedometer_splash_logo">speedometer splash logo</string>
+    <string name="title_activity_settings">Settings Activity</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="speed_header">Floating Speed</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+    <string name="key_speed_font">Speed_Font</string>
+    <string name="key_unit_type">Unit_Type</string>
+    <string name="space">\" \"</string>
+    <string name="speed_bubble_header">Floating Bubble</string>
+    <string name="key_float_speed">f_b_speed</string>
+    <string name="key_app_theme">App_Theme</string>
+    <string name="speed_color">Speed Color</string>
+    <string name="key_speed_color">Speed_Color</string>
+    <string name="key_app_font">App_Font</string>
+    <string name="defalut1">default</string>
+
 
     <!-- Preference Titles -->
 

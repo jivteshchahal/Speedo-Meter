@@ -3,24 +3,34 @@ package com.chahal.speedometer
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.Typeface
 import android.location.*
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.preference.PreferenceManager
+import com.chahal.speedometer.service.NewForegroundService
 import java.io.IOException
 import java.text.NumberFormat
 import java.util.*
 
 
 @Suppress("DEPRECATION")
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     var speed = 0.0f
     private var maxSpeed = -100.0
     private var locationManager: LocationManager? = null
@@ -36,13 +46,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnReset: Button
     private lateinit var btnAbout: ImageButton
     private lateinit var btnSettings: ImageButton
+    private lateinit var btnAboutMe: ImageButton
     var multiplier = 3.6f
     var strUnits = ""
+    private lateinit var numberFormat: NumberFormat
+    private lateinit var preferences: SharedPreferences
 
     @SuppressLint("InvalidWakeLockTag")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        preferences = PreferenceManager.getDefaultSharedPreferences(this)
         tvCurrentLocation = findViewById(R.id.tvCurrentLocation)
         tvAccuracy = findViewById(R.id.tvAccuracy)
         tvSpeed = findViewById(R.id.tvSpeed)
@@ -55,30 +69,42 @@ class MainActivity : AppCompatActivity() {
         btnReset = findViewById(R.id.btnReset)
         btnAbout = findViewById(R.id.btnAbout)
         btnSettings = findViewById(R.id.btnSettings)
+        btnAboutMe = findViewById(R.id.btnAboutMe)
+        numberFormat = NumberFormat.getNumberInstance()
+        numberFormat.maximumFractionDigits = 0
+        setUnitAndFont(preferences, getString(R.string.key_speed_font))
+        setUnitAndFont(preferences, getString(R.string.key_unit_type))
+        setUnitAndFont(preferences, getString(R.string.key_app_theme))
+        setUnitAndFont(preferences, getString(R.string.key_speed_color))
+        setUnitAndFont(preferences, getString(R.string.key_unit_type))
         locationPermission()
-        strUnits = getString(R.string.kmph)
+        PreferenceManager.getDefaultSharedPreferences(this)
+            .registerOnSharedPreferenceChangeListener(this)
         checkNetworkConnections()
         btnSettings.setOnClickListener {
-//            supportFragmentManager.beginTransaction().replace(android.R.id.content, SettingsFragment2()).commit()
+            startActivity(Intent(this, SettingsActivity::class.java))
         }
-        btnRGroup.setOnCheckedChangeListener { _, checkedId ->
-            run {
-                when (checkedId) {
-                    R.id.btnRbKmh -> {
-                        multiplier = 3.6f
-                        strUnits = getString(R.string.kmph)
-                    }
-                    R.id.btnRbMh -> {
-                        multiplier = 2.25f
-                        strUnits = getString(R.string.mph)
-                    }
-                    R.id.btnRbMs -> {
-                        multiplier = 1.0f
-                        strUnits = getString(R.string.mps)
-                    }
-                }
-            }
+        btnAboutMe.setOnClickListener {
+
         }
+//        btnRGroup.setOnCheckedChangeListener { _, checkedId ->
+//            run {
+//                when (checkedId) {
+//                    R.id.btnRbKmh -> {
+//                        multiplier = 3.6f
+//                        strUnits = getString(R.string.kmph)
+//                    }
+//                    R.id.btnRbMh -> {
+//                        multiplier = 2.25f
+//                        strUnits = getString(R.string.mph)
+//                    }
+//                    R.id.btnRbMs -> {
+//                        multiplier = 1.0f
+//                        strUnits = getString(R.string.mps)
+//                    }
+//                }
+//            }
+//        }
         btnReset.setOnClickListener {
             strUnits = getString(R.string.kmph)
             speed = 0.0f
@@ -93,15 +119,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkNetworkConnections() {
-        if(isNetworkConnected()) {
-            if(isInternetAvailable()) {
+        if (isNetworkConnected()) {
+            if (isInternetAvailable()) {
                 getLocation()
-            }else{
+            } else {
                 showDialog(false)
                 getLocation()
             }
-        }else{
+        } else {
             showDialog(false)
+            getLocation()
         }
     }
 
@@ -119,12 +146,10 @@ class MainActivity : AppCompatActivity() {
                 }
                 localSpeed = speed * multiplier
                 fitSpeed = filter(fitSpeed, localSpeed)
-                val numberFormat = NumberFormat.getNumberInstance()
-                numberFormat.maximumFractionDigits = 0
                 tvUnits.text = strUnits
                 tvSpeed.text = numberFormat.format(speed.toDouble() * multiplier)
                 tvMaxSpeed.text =
-                    getString(R.string.threedpoint).format(maxSpeed * multiplier) + strUnits
+                    getString(R.string.threedpoint).format(maxSpeed * multiplier) + " " + strUnits
                 if (location.hasAltitude()) {
                     tvAccuracy.text = numberFormat.format(location.accuracy.toDouble()) + getString(
                         R.string.accuracym
@@ -230,12 +255,13 @@ class MainActivity : AppCompatActivity() {
                     // No location access granted.
                     Toast.makeText(this, getString(R.string.toastNoPermission), Toast.LENGTH_LONG)
                         .show()
+//                    Settings.ACTION_LOCATION_SOURCE_SETTINGS(this)
                 }
             }
         }
-// Before you perform the actual permission request, check whether your app
-// already has the permissions, and whether your app needs to show a permission
-// rationale dialog. For more details, see Request permissions.
+        // Before you perform the actual permission request, check whether your app
+        // already has the permissions, and whether your app needs to show a permission
+        // rationale dialog. For more details, see Request permissions.
         locationPermissionRequest.launch(
             arrayOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -246,28 +272,32 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     @Throws(PackageManager.NameNotFoundException::class)
-    private fun showDialog(flag:Boolean) {
+    private fun showDialog(flag: Boolean) {
         val dialog = AppCompatDialog(this)
         dialog.setContentView(R.layout.about_dialog)
 
         val tvAppName: TextView? = dialog.findViewById(R.id.tvAppName)
-        val tvDescription: TextView? =dialog.findViewById(R.id.tvDialogDes)
+        val tvDescription: TextView? = dialog.findViewById(R.id.tvDialogDes)
         if (tvAppName != null) {
-            tvAppName.text = getString(R.string.app_name)+ " " + packageManager.getPackageInfo(packageName, 0).versionName
+            tvAppName.text = getString(R.string.app_name) + " " + packageManager.getPackageInfo(
+                packageName,
+                0
+            ).versionName
         }
         dialog.setTitle(
             "About Speedometer "
                     + packageManager.getPackageInfo(packageName, 0).versionName
         )
-        if(flag){
-//            tvDescription!!.text = getString(R.string.licence)
-        }else{
+        if (flag) {
+            // tvDescription!!.text = getString(R.string.licence)
+        } else {
             tvDescription!!.textAlignment = View.TEXT_ALIGNMENT_CENTER
             tvDescription.text = getString(R.string.dialog_internet)
         }
         dialog.setCancelable(true)
         dialog.show()
     }
+
     private fun isNetworkConnected(): Boolean {
         val cm = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
         return cm.activeNetworkInfo != null && cm.activeNetworkInfo!!.isConnected
@@ -277,5 +307,128 @@ class MainActivity : AppCompatActivity() {
     fun isInternetAvailable(): Boolean {
         val command = "ping -c 1 google.com"
         return Runtime.getRuntime().exec(command).waitFor() == 0
+    }
+
+    private fun startService() {
+        // check if the user has already granted
+        // the Draw over other apps permission
+        if (Settings.canDrawOverlays(this)) {
+            // start the service based on the android version
+            startForegroundService(Intent(this, NewForegroundService::class.java))
+        }
+    }
+
+    private fun checkOverlayPermission() {
+        if (!Settings.canDrawOverlays(this)) {
+            // send user to the device settings
+            val myIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+            startActivity(myIntent)
+        }
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        if (sharedPreferences != null) {
+            setUnitAndFont(sharedPreferences, key)
+        }
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setUnitAndFont(preferences: SharedPreferences, key: String?) {
+        if (key.equals(getString(R.string.key_unit_type))) {
+            when (preferences.getString(getString(R.string.key_unit_type), "Km/h").toString()) {
+                getString(R.string.kmph) -> {
+                    multiplier = 3.6f
+                    strUnits = getString(R.string.kmph)
+                }
+                getString(R.string.mph) -> {
+                    multiplier = 2.25f
+                    strUnits = getString(R.string.mph)
+                }
+                getString(R.string.mps) -> {
+                    multiplier = 1.0f
+                    strUnits = getString(R.string.mps)
+                }
+            }
+            tvUnits.text = strUnits
+            tvSpeed.text = numberFormat.format(speed.toDouble() * multiplier)
+            tvMaxSpeed.text =
+                getString(R.string.threedpoint).format(maxSpeed * multiplier) + getString(R.string.space) + strUnits
+        } else if (key.equals(getString(R.string.key_speed_font))) {
+            val items = resources.getStringArray(R.array.speedFontAlias)
+            var typeface: Typeface? = ResourcesCompat.getFont(this, R.font.texazgxxaq)
+            when (preferences.getString(
+                getString(R.string.key_speed_font),
+                getString(R.string.defalut1)
+            ).toString()) {
+                items[0] -> {
+                    typeface = ResourcesCompat.getFont(this, R.font.texazgxxaq)!!
+                }
+                items[1] -> {
+                    typeface = ResourcesCompat.getFont(this, R.font.harryp)!!
+                }
+                items[2] -> {
+                    typeface = ResourcesCompat.getFont(this, R.font.grounsp7r)!!
+                }
+                items[3] -> {
+                    typeface = ResourcesCompat.getFont(this, R.font.paintingwithchocolate5mo)!!
+                }
+                items[4] -> {
+                    typeface = ResourcesCompat.getFont(this, R.font.essentialarrangement3p)!!
+                }
+                items[5] -> {
+                    typeface = ResourcesCompat.getFont(this, R.font.essentialr)!!
+                }
+                items[6] -> {
+                    typeface = ResourcesCompat.getFont(this, R.font.essentialrrangementy3)!!
+                }
+            }
+            tvSpeed.typeface = typeface
+        } else if (key.equals(getString(R.string.key_speed_color))) {
+            val items = resources.getStringArray(R.array.speedColorAlias)
+            Log.e(
+                "SP",
+                preferences.getString(
+                    getString(R.string.key_speed_color),
+                    getString(R.string.defalut1)
+                ).toString()
+            )
+            when (preferences.getString(
+                getString(R.string.key_speed_color),
+                getString(R.string.defalut1)
+            ).toString()) {
+                items[0] -> {
+                    tvSpeed.setTextColor(Color.parseColor(items[0]))
+                }
+                items[1] -> {
+                    tvSpeed.setTextColor(Color.parseColor(items[1]))
+                }
+                items[2] -> {
+                    tvSpeed.setTextColor(Color.parseColor(items[2]))
+                }
+                items[3] -> {
+                    tvSpeed.setTextColor(Color.parseColor(items[3]))
+                }
+                items[4] -> {
+                    tvSpeed.setTextColor(Color.parseColor(items[4]))
+                }
+            }
+        } else if (key.equals(getString(R.string.key_float_speed))) {
+            val floatingSpeed = preferences.getBoolean(getString(R.string.key_float_speed), false)
+            if (floatingSpeed) {
+                checkOverlayPermission()
+                startService()
+            } else {
+                stopService(Intent(this, NewForegroundService::class.java))
+            }
+        } else if (key.equals(getString(R.string.key_app_theme))) {
+            val appTheme = preferences.getBoolean(getString(R.string.key_app_theme), false)
+            if (appTheme) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            }
+        }
+
     }
 }

@@ -1,26 +1,24 @@
 <resources>
-    <!-- Reply Preference -->
-
     <string-array name="speedFont">
+        <item>Texa</item>
         <item>Harry Potter</item>
-        <item>new1</item>
-        <item>new2</item>
+        <item>Grouns</item>
+        <item>Paint with choc</item>
+        <item>essential 1</item>
+        <item>essential 2</item>
+        <item>essential 3</item>
     </string-array>
+
     <string-array name="speedFontAlias">
+        <item>default</item>
         <item>hp</item>
-        <item>n1</item>
-        <item>n2</item>
+        <item>Grouns</item>
+        <item>PWC</item>
+        <item>e1</item>
+        <item>e2</item>
+        <item>e3</item>
     </string-array>
-    <string-array name="appFont">
-        <item>Harry Potter</item>
-        <item>new1</item>
-        <item>new2</item>
-    </string-array>
-    <string-array name="appFontAlias">
-        <item>hp</item>
-        <item>n1</item>
-        <item>n2</item>
-    </string-array>
+
     <string-array name="unitType">
         <item>Km/h</item>
         <item>M/h</item>
@@ -31,4 +29,38 @@
         <item>M/h</item>
         <item>m/s</item>
     </string-array>
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>Reply</item>
+        <item>Reply to all</item>
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>reply</item>
+        <item>reply_all</item>
+    </string-array>
+    <string-array name="speedColor">
+        <item>Default</item>
+        <item>Green</item>
+        <item>Red</item>
+        <item>White</item>
+        <item>Yellow</item>
+    </string-array>
+    <string-array name="speedColorAlias" >
+        <item>#FFFFFF</item>
+        <item>#00FF00</item>
+        <item>#FF0000</item>
+        <item>#FFFFFF</item>
+        <item>#FFFF00</item>
+    </string-array>
+    <array name="autosize_text_sizes">
+        <item>240sp</item>
+        <item>280sp</item>
+        <item>300sp</item>
+        <item>400sp</item>
+        <item>480sp</item>
+        <item>500sp</item>
+        <item>700sp</item>
+    </array>
+
 </resources>
