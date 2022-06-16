@@ -54,9 +54,6 @@
         <item>#FFFF00</item>
     </string-array>
     <array name="autosize_text_sizes">
-        <item>240sp</item>
-        <item>280sp</item>
-        <item>300sp</item>
         <item>400sp</item>
         <item>480sp</item>
         <item>500sp</item>

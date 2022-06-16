@@ -15,8 +15,8 @@
     android:orientation="vertical">
 <ImageButton
     android:id="@+id/btnFabClose"
-    android:layout_width="8dp"
-    android:layout_height="8dp"
+    android:layout_width="12dp"
+    android:layout_height="12dp"
     android:layout_gravity="end"
     android:src="@android:drawable/ic_menu_close_clear_cancel"
     tools:ignore="ContentDescription">

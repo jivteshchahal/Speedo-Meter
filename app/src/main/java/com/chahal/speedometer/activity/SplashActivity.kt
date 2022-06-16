@@ -1,4 +1,4 @@
-package com.chahal.speedometer
+package com.chahal.speedometer.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import com.chahal.speedometer.R
 
 
 @SuppressLint("CustomSplashScreen")

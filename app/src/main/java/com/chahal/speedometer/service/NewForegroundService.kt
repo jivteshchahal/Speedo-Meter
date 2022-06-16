@@ -1,31 +1,17 @@
 package com.chahal.speedometer.service
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.*
-import android.os.Build
 import android.os.IBinder
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.RadioGroup
-import android.widget.TextView
-import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
-import com.chahal.speedometer.R
-import com.chahal.speedometer.Window
-import java.text.NumberFormat
-import java.util.*
+import com.chahal.speedometer.helper.Window
 
 class NewForegroundService : Service() {
-    private lateinit var window :Window
+    private lateinit var window: Window
 
     override fun onBind(intent: Intent): IBinder {
         TODO("Return the communication channel to the service.")
@@ -43,15 +29,20 @@ class NewForegroundService : Service() {
     }
 
     private fun startMyOwnForeground() {
-        val NOTIFICATION_CHANNEL_ID = "example.permanence"
+        val notificationChannelId = "example.permanence"
         val channelName = "Background Service"
-        val chan = NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_MIN)
+        val channel = NotificationChannel(
+            notificationChannelId,
+            channelName,
+            NotificationManager.IMPORTANCE_MIN
+        )
 
-        val manager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//        val manager != null;
-        manager.createNotificationChannel(chan)
+        val manager: NotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.createNotificationChannel(channel)
 
-        val  notificationBuilder: NotificationCompat.Builder =  NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+        val notificationBuilder: NotificationCompat.Builder =
+            NotificationCompat.Builder(this, notificationChannelId)
         val notification: Notification = notificationBuilder.setOngoing(true)
             .setContentTitle("Service running")
             .setContentText("Displaying over other apps")

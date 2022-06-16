@@ -1,4 +1,7 @@
 <resources>
     <dimen name="tvSplash_text_size_max">72sp</dimen>
     <dimen name="top_speedometer_text_max">72sp</dimen>
+    <dimen name="tv_speed_max">700sp</dimen>
+    <dimen name="tv_speed_min">4000sp</dimen>
+
 </resources>

@@ -109,11 +109,11 @@ The following definitions shall have the same meaning regardless of whether they
     <string name="accuracy">NA</string>
     <string name="accuracy1">Accuracy:</string>
     <string name="current_location">Current Location</string>
-    <string name="_100">100</string>
+    <string name="_100">00</string>
     <string name="app_unit_type">App Unit Type</string>
     <string name="unit_type">Unit type</string>
     <string name="threedpoint">%.3f</string>
-    <string name="dialog_internet">No Internet Connection Available. Check network connections and restart the app.</string>
+    <string name="dialog_internet">No Internet Connection Available. Address might not be available. Tap to close</string>
     <string name="btn_about">about</string>
     <string name="btn_settings">settings</string>
     <string name="speedometer_logo">Speedometer logo</string>
@@ -136,6 +136,7 @@ The following definitions shall have the same meaning regardless of whether they
     <string name="key_speed_color">Speed_Color</string>
     <string name="key_app_font">App_Font</string>
     <string name="defalut1">default</string>
+    <string name="offline_gps">Offline GPS</string>
 
 
     <!-- Preference Titles -->

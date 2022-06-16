@@ -1,4 +1,4 @@
-package com.chahal.speedometer
+package com.chahal.speedometer.helper
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -15,11 +15,12 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.app.ActivityCompat
+import com.chahal.speedometer.R
 import java.text.NumberFormat
 import java.util.*
 
 
-@SuppressLint("ClickableViewAccessibility")
+@SuppressLint("ClickableViewAccessibility", "InflateParams")
 class Window(val context: Service) {
     var speed = 0.0f
     private var maxSpeed = -100.0
@@ -33,7 +34,7 @@ class Window(val context: Service) {
     private var mParams: WindowManager.LayoutParams? = null
     private val mWindowManager: WindowManager
     private val layoutInflater: LayoutInflater
-    private val MAX_CLICK_DURATION = 1000
+//    private val MAX_CLICK_DURATION = 1000
     private var startClickTime: Long = 0
     fun open() {
         try {
@@ -120,11 +121,11 @@ class Window(val context: Service) {
                             return false
                         }
                         MotionEvent.ACTION_UP -> {
-                            val Xdiff = (event.rawX - initialTouchX).toInt()
-                            val Ydiff = (event.rawY - initialTouchY).toInt()
-                            val clickDuration: Long = Calendar.getInstance().timeInMillis - startClickTime
-                            if (clickDuration > MAX_CLICK_DURATION) {
-                            }
+//                            val Xdiff = (event.rawX - initialTouchX).toInt()
+//                            val Ydiff = (event.rawY - initialTouchY).toInt()
+//                            val clickDuration: Long = Calendar.getInstance().timeInMillis - startClickTime
+//                            if (clickDuration > MAX_CLICK_DURATION) {
+//                            }
                             return false
                         }
                         MotionEvent.ACTION_MOVE -> {
@@ -148,7 +149,6 @@ class Window(val context: Service) {
 
             @SuppressLint("SetTextI18n")
             override fun onLocationChanged(location: Location) {
-//                getCurrentAddress(location)
                 speed = location.speed
                 if (maxSpeed < speed) {
                     maxSpeed = speed.toDouble()
@@ -190,8 +190,6 @@ class Window(val context: Service) {
                 }
                 val nf = NumberFormat.getInstance()
                 nf.maximumFractionDigits = 4
-//                tvLat.text = nf.format(location.latitude) + getString(R.string.lat)
-//                tvLong.text = nf.format(location.longitude) + getString(R.string.longi)
             }
 
             override fun onProviderEnabled(provider: String) {

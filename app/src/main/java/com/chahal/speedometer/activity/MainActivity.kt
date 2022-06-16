@@ -1,4 +1,4 @@
-package com.chahal.speedometer
+package com.chahal.speedometer.activity
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -9,11 +9,9 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Typeface
 import android.location.*
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,13 +21,12 @@ import androidx.appcompat.app.AppCompatDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.preference.PreferenceManager
+import com.chahal.speedometer.R
 import com.chahal.speedometer.service.NewForegroundService
-import java.io.IOException
 import java.text.NumberFormat
 import java.util.*
 
 
-@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     var speed = 0.0f
     private var maxSpeed = -100.0
@@ -77,60 +74,27 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         setUnitAndFont(preferences, getString(R.string.key_app_theme))
         setUnitAndFont(preferences, getString(R.string.key_speed_color))
         setUnitAndFont(preferences, getString(R.string.key_unit_type))
-        locationPermission()
+        getLocation()
         PreferenceManager.getDefaultSharedPreferences(this)
             .registerOnSharedPreferenceChangeListener(this)
-        checkNetworkConnections()
         btnSettings.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
         btnAboutMe.setOnClickListener {
 
         }
-//        btnRGroup.setOnCheckedChangeListener { _, checkedId ->
-//            run {
-//                when (checkedId) {
-//                    R.id.btnRbKmh -> {
-//                        multiplier = 3.6f
-//                        strUnits = getString(R.string.kmph)
-//                    }
-//                    R.id.btnRbMh -> {
-//                        multiplier = 2.25f
-//                        strUnits = getString(R.string.mph)
-//                    }
-//                    R.id.btnRbMs -> {
-//                        multiplier = 1.0f
-//                        strUnits = getString(R.string.mps)
-//                    }
-//                }
-//            }
-//        }
         btnReset.setOnClickListener {
             strUnits = getString(R.string.kmph)
             speed = 0.0f
             maxSpeed = -100.0
             findViewById<RadioButton>(R.id.btnRbKmh).isChecked = true
-            checkNetworkConnections()
         }
         btnAbout.setOnClickListener {
-            showDialog(true)
+            showDialog()
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
-    private fun checkNetworkConnections() {
-        if (isNetworkConnected()) {
-            if (isInternetAvailable()) {
-                getLocation()
-            } else {
-                showDialog(false)
-                getLocation()
-            }
-        } else {
-            showDialog(false)
-            getLocation()
-        }
-    }
 
     private fun getLocation() {
         locationManager = (getSystemService(Context.LOCATION_SERVICE) as LocationManager?)!!
@@ -140,6 +104,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
             @SuppressLint("SetTextI18n")
             override fun onLocationChanged(location: Location) {
+                speed = location.speed
                 getCurrentAddress(location)
                 if (maxSpeed < speed) {
                     maxSpeed = speed.toDouble()
@@ -192,6 +157,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
             override fun onProviderEnabled(provider: String) {
                 tvSpeed.text = getString(R.string.providerStr)
+                Log.e("Provider", provider)
             }
 
             override fun onProviderDisabled(provider: String) {
@@ -216,18 +182,20 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun getCurrentAddress(location: Location) {
-        val addresses: List<Address>
         val geocoder = Geocoder(applicationContext, Locale.getDefault())
 
-        addresses = geocoder.getFromLocation(
-            location.latitude,
-            location.longitude,
-            1
-        )
-        val address: String =
-            addresses[0].getAddressLine(0)
-        tvCurrentLocation.text = address
-        speed = location.speed
+        if (geocoder != null) {
+            val addresses: List<Address> = geocoder.getFromLocation(
+                location.latitude,
+                location.longitude,
+                1
+            )
+            val address: String =
+                addresses[0].getAddressLine(0)
+            tvCurrentLocation.text = address
+        } else {
+            tvCurrentLocation.text = getString(R.string.offline_gps)
+        }
     }
 
     private fun filter(prev: Float, curr: Float): Float {
@@ -255,7 +223,11 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     // No location access granted.
                     Toast.makeText(this, getString(R.string.toastNoPermission), Toast.LENGTH_LONG)
                         .show()
-//                    Settings.ACTION_LOCATION_SOURCE_SETTINGS(this)
+//                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    val uri: Uri = Uri.fromParts("package", packageName, null)
+//                    intent.data = uri
+//                    startActivity(intent)
                 }
             }
         }
@@ -272,10 +244,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     @SuppressLint("SetTextI18n")
     @Throws(PackageManager.NameNotFoundException::class)
-    private fun showDialog(flag: Boolean) {
+    private fun showDialog() {
         val dialog = AppCompatDialog(this)
         dialog.setContentView(R.layout.about_dialog)
-
         val tvAppName: TextView? = dialog.findViewById(R.id.tvAppName)
         val tvDescription: TextView? = dialog.findViewById(R.id.tvDialogDes)
         if (tvAppName != null) {
@@ -288,26 +259,21 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             "About Speedometer "
                     + packageManager.getPackageInfo(packageName, 0).versionName
         )
-        if (flag) {
-            // tvDescription!!.text = getString(R.string.licence)
-        } else {
-            tvDescription!!.textAlignment = View.TEXT_ALIGNMENT_CENTER
-            tvDescription.text = getString(R.string.dialog_internet)
-        }
+        tvDescription!!.text = getString(R.string.licence)
         dialog.setCancelable(true)
         dialog.show()
     }
 
-    private fun isNetworkConnected(): Boolean {
-        val cm = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-        return cm.activeNetworkInfo != null && cm.activeNetworkInfo!!.isConnected
-    }
-
-    @Throws(InterruptedException::class, IOException::class)
-    fun isInternetAvailable(): Boolean {
-        val command = "ping -c 1 google.com"
-        return Runtime.getRuntime().exec(command).waitFor() == 0
-    }
+//    private fun isNetworkConnected(): Boolean {
+//        val cm = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+//        return cm.activeNetworkInfo != null && cm.activeNetworkInfo!!.isConnected
+//    }
+//
+//    @Throws(InterruptedException::class, IOException::class)
+//    fun isInternetAvailable(): Boolean {
+//        val command = "ping -c 1 google.com"
+//        return Runtime.getRuntime().exec(command).waitFor() == 0
+//    }
 
     private fun startService() {
         // check if the user has already granted
@@ -351,9 +317,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 }
             }
             tvUnits.text = strUnits
-            tvSpeed.text = numberFormat.format(speed.toDouble() * multiplier)
-            tvMaxSpeed.text =
-                getString(R.string.threedpoint).format(maxSpeed * multiplier) + getString(R.string.space) + strUnits
+            getLocation()
         } else if (key.equals(getString(R.string.key_speed_font))) {
             val items = resources.getStringArray(R.array.speedFontAlias)
             var typeface: Typeface? = ResourcesCompat.getFont(this, R.font.texazgxxaq)
