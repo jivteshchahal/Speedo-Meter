@@ -32,19 +32,18 @@ class SettingsActivity : AppCompatActivity() {
         }
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
-            val mListPreference = preferenceManager.findPreference<Preference>(getString(R.string.key_unit_type)) as ListPreference?
-            if (mListPreference!!.value == null) {
-                // to ensure we don't get a null value
-                // set first value by default
-                mListPreference.setValueIndex(0)
-            }
-            mListPreference.onPreferenceChangeListener =
-                Preference.OnPreferenceChangeListener { _, newValue ->
-                    Log.e("Unit_Type", newValue.toString())
-                    mListPreference.setValueIndex(mListPreference.findIndexOfValue(newValue.toString()))
-                    mListPreference.value = newValue as String?
-                    false
-                }
+//            val mListPreference = preferenceManager.findPreference<Preference>(getString(R.string.key_unit_type)) as ListPreference?
+//            if (mListPreference!!.value == null) {
+//                // to ensure we don't get a null value
+//                // set first value by default
+//                mListPreference.setValueIndex(0)
+//            }
+//            mListPreference.onPreferenceChangeListener =
+//                Preference.OnPreferenceChangeListener { _, newValue ->
+//                    mListPreference.setValueIndex(mListPreference.findIndexOfValue(newValue.toString()))
+//                    mListPreference.value = newValue as String?
+//                    false
+//                }
             val mListPreference1 =
                 preferenceManager.findPreference<Preference>(getString(R.string.key_speed_font)) as ListPreference?
             if (mListPreference1!!.value == null) {
@@ -54,18 +53,10 @@ class SettingsActivity : AppCompatActivity() {
             }
             mListPreference1.onPreferenceChangeListener =
                 Preference.OnPreferenceChangeListener { _, newValue ->
-                    Log.e("Speed_Font", newValue.toString())
                     mListPreference1.setValueIndex(mListPreference1.findIndexOfValue(newValue.toString()))
                     mListPreference1.value = newValue as String?
                     false
                 }
-//            val mSwitchPreference2 =
-//                preferenceManager.findPreference<Preference>(getString(R.string.key_float_speed)) as SwitchPreference?
-//                mSwitchPreference2!!.onPreferenceChangeListener =
-//                    Preference.OnPreferenceChangeListener { _, newValue ->
-//                        Log.e("Unit_Type", newValue.toString())
-//                        false
-//                    }
         }
     }
 }

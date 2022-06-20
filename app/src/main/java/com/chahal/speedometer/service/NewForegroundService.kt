@@ -6,20 +6,19 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.location.Location
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.MutableLiveData
 import com.chahal.speedometer.helper.Window
 
-class NewForegroundService : Service() {
+class NewForegroundService : LifecycleService() {
     private lateinit var window: Window
-
-    override fun onBind(intent: Intent): IBinder {
-        TODO("Return the communication channel to the service.")
-    }
 
     override fun onCreate() {
         super.onCreate()
-        window = Window(this)
+        window = Window(this,this)
         // create the custom or default notification
         // based on the android version
         startMyOwnForeground()
@@ -27,7 +26,6 @@ class NewForegroundService : Service() {
         // and display the content on screen
         window.open()
     }
-
     private fun startMyOwnForeground() {
         val notificationChannelId = "example.permanence"
         val channelName = "Background Service"

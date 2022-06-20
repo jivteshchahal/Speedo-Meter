@@ -1,35 +1,35 @@
 <resources>
     <string name="app_name">SpeedoMeter</string>
-    <string name="providerStr">STDBY</string>
-    <string name="kmph">"Km/h"</string>
-    <string name="mph">"M/h"</string>
-    <string name="mps">"m/s"</string>
-    <string name="directionNil">NIL</string>
-    <string name="directionNorth">North</string>
-    <string name="directionNE">North-East</string>
-    <string name="directionE">East</string>
-    <string name="directionSE">South-East</string>
-    <string name="directionS">South</string>
-    <string name="directionSW">South-West</string>
-    <string name="directionW">West</string>
-    <string name="directionNW">North-West</string>
-    <string name="directionN">North</string>
-    <string name="directionNA">NA</string>
-    <string name="directionSNorth">N</string>
-    <string name="directionSNE">N-E</string>
-    <string name="directionSsE">E</string>
-    <string name="directionSSE">S-E</string>
-    <string name="directionSS">S</string>
-    <string name="directionSSW">S-W</string>
-    <string name="directionSsW">W</string>
-    <string name="directionSNW">N-W</string>
-    <string name="directionSN">N</string>
+    <string name="string_providerStr">STDBY</string>
+    <string name="string_kmph">"Km/h"</string>
+    <string name="string_mph">"M/h"</string>
+    <string name="string_mps">"m/s"</string>
+    <string name="string_directionNil">NIL</string>
+    <string name="string_directionNorth">North</string>
+    <string name="string_directionNE">North-East</string>
+    <string name="string_directionE">East</string>
+    <string name="string_directionSE">South-East</string>
+    <string name="string_directionS">South</string>
+    <string name="string_directionSW">South-West</string>
+    <string name="string_directionW">West</string>
+    <string name="string_directionNW">North-West</string>
+    <string name="string_directionN">North</string>
+    <string name="string_directionNA">N A</string>
+    <string name="string_directionSNorth">N</string>
+    <string name="string_directionSNE">N-E</string>
+    <string name="string_directionSsE">E</string>
+    <string name="string_directionSSE">S-E</string>
+    <string name="string_directionSS">S</string>
+    <string name="string_directionSSW">S-W</string>
+    <string name="string_directionSsW">W</string>
+    <string name="string_directionSNW">N-W</string>
+    <string name="string_directionSN">N</string>
 
-    <string name="lat">" Lat"</string>
-    <string name="longi">" Long"</string>
-    <string name="accuracym">" m"</string>
-    <string name="toastCourseLoc">Fine location needed for accurate data</string>
-    <string name="toastNoPermission">Location access needed for the App</string>
+    <string name="string_lat">" Lat"</string>
+    <string name="string_longi">" Long"</string>
+    <string name="string_accuracym">" m"</string>
+    <string name="string_toastCourseLoc">Fine location needed for accurate data</string>
+    <string name="string_toastNoPermission">Location access needed for the App</string>
     <!-- Preference Titles -->
 
     <!-- Font Preferences -->
@@ -97,48 +97,48 @@ The following definitions shall have the same meaning regardless of whether they
 <p>By visiting this page on our website: <a href="https://github.com/jivteshchahal/Speedo-Meter" rel="external nofollow noopener" target="_blank">https://github.com/jivteshchahal/Speedo-Meter</a></p>
 </li>
 </ul> </string>
-    <string name="reset">Reset</string>
-    <string name="m_s">m/s</string>
-    <string name="m_h">M/h</string>
-    <string name="km_h">Km/h</string>
-    <string name="loading">loading…</string>
-    <string name="max_speed">Max Speed</string>
-    <string name="maxSpeed">Max Speed:</string>
-    <string name="direction">loading</string>
-    <string name="direction1">Direction:</string>
-    <string name="accuracy">NA</string>
-    <string name="accuracy1">Accuracy:</string>
-    <string name="current_location">Current Location</string>
-    <string name="_100">00</string>
-    <string name="app_unit_type">App Unit Type</string>
-    <string name="unit_type">Unit type</string>
-    <string name="threedpoint">%.3f</string>
-    <string name="dialog_internet">No Internet Connection Available. Address might not be available. Tap to close</string>
-    <string name="btn_about">about</string>
-    <string name="btn_settings">settings</string>
-    <string name="speedometer_logo">Speedometer logo</string>
-    <string name="speedometer_splash_logo">speedometer splash logo</string>
     <string name="title_activity_settings">Settings Activity</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="speed_header">Floating Speed</string>
 
     <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
     <string name="key_speed_font">Speed_Font</string>
     <string name="key_unit_type">Unit_Type</string>
-    <string name="space">\" \"</string>
     <string name="speed_bubble_header">Floating Bubble</string>
     <string name="key_float_speed">f_b_speed</string>
     <string name="key_app_theme">App_Theme</string>
-    <string name="speed_color">Speed Color</string>
     <string name="key_speed_color">Speed_Color</string>
     <string name="key_app_font">App_Font</string>
-    <string name="defalut1">default</string>
-    <string name="offline_gps">Offline GPS</string>
-
-
+    <string name="string_default1">default</string>
+    <string name="string_offline_gps">Offline GPS</string>
+    <string name="string_extras">GPS Signal:</string>
+    <string name="key_extras_sat">satellites</string>
+    <string name="string_speed_color">Speed Color</string>
+    <string name="string_0">0</string>
+    <string name="string_space">\" \"</string>
+    <string name="string_sat">\ Satellites\</string>
+    <string name="string_altitude">Altitude:</string>
+    <string name="string_reset">Reset</string>
+    <string name="string_m_s">m/s</string>
+    <string name="string_m_h">M/h</string>
+    <string name="string_km_h">Km/h</string>
+    <string name="string_loading">loading…</string>
+    <string name="string_max_speed">Max Speed</string>
+    <string name="string_maxSpeed">Max Speed:</string>
+    <string name="string_direction">loading</string>
+    <string name="string_direction1">Direction:</string>
+    <string name="string_accuracy">NA</string>
+    <string name="string_accuracy1">Accuracy:</string>
+    <string name="string_current_location">Current Location</string>
+    <string name="string_100">100</string>
+    <string name="string_unit_type">Unit type</string>
+    <string name="string_threedpoint">%.3f</string>
+    <string name="string_dialog_internet">No Internet Connection Available. Address might not be available. Tap to close</string>
+    <string name="string_btn_about">about</string>
+    <string name="string_btn_settings">settings</string>
+    <string name="string_speedometer_logo">Speedometer logo</string>
+    <string name="string_speedometer_splash_logo">speedometer splash logo</string>
     <!-- Preference Titles -->
 
     <!-- Messages Preferences -->

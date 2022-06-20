@@ -35,7 +35,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvSplash"
         app:srcCompat="@drawable/logo"
-        android:contentDescription="@string/speedometer_splash_logo" />
+        android:contentDescription="@string/string_speedometer_splash_logo" />
 
     <ProgressBar
         android:id="@+id/progressBar"

@@ -1,25 +1,29 @@
 package com.chahal.speedometer.activity
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.TypedArray
 import android.graphics.Color
 import android.graphics.Typeface
 import android.location.*
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.util.TypedValue
+import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDialog
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
 import com.chahal.speedometer.R
 import com.chahal.speedometer.service.NewForegroundService
@@ -30,51 +34,56 @@ import java.util.*
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     var speed = 0.0f
     private var maxSpeed = -100.0
-    private var locationManager: LocationManager? = null
+    private lateinit var listener: LocationListener
+    private lateinit var locationManager: LocationManager
     private lateinit var tvCurrentLocation: TextView
     private lateinit var tvAccuracy: TextView
     private lateinit var tvSpeed: TextView
     private lateinit var tvMaxSpeed: TextView
+    private lateinit var tvExtras: TextView
+    private lateinit var tvAltitude: TextView
     private lateinit var tvDirection: TextView
     private lateinit var tvLat: TextView
     private lateinit var tvLong: TextView
     private lateinit var tvUnits: TextView
-    private lateinit var btnRGroup: RadioGroup
     private lateinit var btnReset: Button
     private lateinit var btnAbout: ImageButton
     private lateinit var btnSettings: ImageButton
     private lateinit var btnAboutMe: ImageButton
+    private lateinit var loc: MutableLiveData<Location>
     var multiplier = 3.6f
-    var strUnits = ""
+    private lateinit var strUnits: String
     private lateinit var numberFormat: NumberFormat
     private lateinit var preferences: SharedPreferences
 
-    @SuppressLint("InvalidWakeLockTag")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        preferences = PreferenceManager.getDefaultSharedPreferences(this)
+
         tvCurrentLocation = findViewById(R.id.tvCurrentLocation)
         tvAccuracy = findViewById(R.id.tvAccuracy)
         tvSpeed = findViewById(R.id.tvSpeed)
         tvMaxSpeed = findViewById(R.id.tvMaxSpeed)
+        tvExtras = findViewById(R.id.tvExtras)
+        tvAltitude = findViewById(R.id.tvAltitude)
         tvDirection = findViewById(R.id.tvDirection)
         tvLat = findViewById(R.id.tvLat)
         tvLong = findViewById(R.id.tvLong)
         tvUnits = findViewById(R.id.tvUnits)
-        btnRGroup = findViewById(R.id.btnRadioGroup)
         btnReset = findViewById(R.id.btnReset)
         btnAbout = findViewById(R.id.btnAbout)
         btnSettings = findViewById(R.id.btnSettings)
         btnAboutMe = findViewById(R.id.btnAboutMe)
+        loc = MutableLiveData<Location>()
+        getLocation()
         numberFormat = NumberFormat.getNumberInstance()
         numberFormat.maximumFractionDigits = 0
+        preferences = PreferenceManager.getDefaultSharedPreferences(this)
         setUnitAndFont(preferences, getString(R.string.key_speed_font))
         setUnitAndFont(preferences, getString(R.string.key_unit_type))
         setUnitAndFont(preferences, getString(R.string.key_app_theme))
         setUnitAndFont(preferences, getString(R.string.key_speed_color))
         setUnitAndFont(preferences, getString(R.string.key_unit_type))
-        getLocation()
         PreferenceManager.getDefaultSharedPreferences(this)
             .registerOnSharedPreferenceChangeListener(this)
         btnSettings.setOnClickListener {
@@ -84,7 +93,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         }
         btnReset.setOnClickListener {
-            strUnits = getString(R.string.kmph)
+            strUnits = getString(R.string.string_kmph)
             speed = 0.0f
             maxSpeed = -100.0
             findViewById<RadioButton>(R.id.btnRbKmh).isChecked = true
@@ -97,66 +106,16 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
 
     private fun getLocation() {
-        locationManager = (getSystemService(Context.LOCATION_SERVICE) as LocationManager?)!!
-        val listener: LocationListener = object : LocationListener {
-            var fitSpeed = 0f
-            var localSpeed = 0f
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-            @SuppressLint("SetTextI18n")
+        listener = object : LocationListener {
+
             override fun onLocationChanged(location: Location) {
-                speed = location.speed
-                getCurrentAddress(location)
-                if (maxSpeed < speed) {
-                    maxSpeed = speed.toDouble()
-                }
-                localSpeed = speed * multiplier
-                fitSpeed = filter(fitSpeed, localSpeed)
-                tvUnits.text = strUnits
-                tvSpeed.text = numberFormat.format(speed.toDouble() * multiplier)
-                tvMaxSpeed.text =
-                    getString(R.string.threedpoint).format(maxSpeed * multiplier) + " " + strUnits
-                if (location.hasAltitude()) {
-                    tvAccuracy.text = numberFormat.format(location.accuracy.toDouble()) + getString(
-                        R.string.accuracym
-                    )
-                } else {
-                    tvAccuracy.text = getString(R.string.directionNil)
-                }
-                numberFormat.maximumFractionDigits = 0
-                if (location.hasBearing()) {
-                    val bearing = location.bearing.toDouble()
-                    var strDirection = getString(R.string.directionNil)
-                    if (bearing < 20.0) {
-                        strDirection = getString(R.string.directionNorth)
-                    } else if (bearing < 65.0) {
-                        strDirection = getString(R.string.directionNE)
-                    } else if (bearing < 110.0) {
-                        strDirection = getString(R.string.directionE)
-                    } else if (bearing < 155.0) {
-                        strDirection = getString(R.string.directionSE)
-                    } else if (bearing < 200.0) {
-                        strDirection = getString(R.string.directionS)
-                    } else if (bearing < 250.0) {
-                        strDirection = getString(R.string.directionSW)
-                    } else if (bearing < 290.0) {
-                        strDirection = getString(R.string.directionW)
-                    } else if (bearing < 345.0) {
-                        strDirection = getString(R.string.directionNW)
-                    } else if (bearing < 361.0) {
-                        strDirection = getString(R.string.directionN)
-                    }
-                    tvDirection.text = strDirection
-                } else {
-                    tvDirection.text = getString(R.string.directionNA)
-                }
-                val nf = NumberFormat.getInstance()
-                nf.maximumFractionDigits = 4
-                tvLat.text = nf.format(location.latitude) + getString(R.string.lat)
-                tvLong.text = nf.format(location.longitude) + getString(R.string.longi)
+                loc.value = location
             }
 
             override fun onProviderEnabled(provider: String) {
-                tvSpeed.text = getString(R.string.providerStr)
+                tvAccuracy.text = getString(R.string.string_providerStr)
                 Log.e("Provider", provider)
             }
 
@@ -177,14 +136,87 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             locationPermission()
             return
         } else {
-            locationManager!!.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, listener)
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, listener)
+        }
+        observeLocation()
+    }
+
+    private fun observeLocation() {
+        loc.observe(this) { location: Location ->
+            speed = location.speed
+            getCurrentAddress(location)
+            if (maxSpeed < speed) {
+                maxSpeed = speed.toDouble()
+            }
+            tvUnits.text = strUnits
+            val newSpeed = numberFormat.format(speed.toDouble() * multiplier).toString()
+            tvSpeed.text = newSpeed
+            val extraLayout = findViewById<ConstraintLayout>(R.id.extrasLayout)
+            if (location.extras != null) {
+                extraLayout.visibility = View.VISIBLE
+                val sat = location.extras.getInt(getString(R.string.key_extras_sat))
+                    .toString() + getString(
+                    R.string.string_sat
+                )
+                tvExtras.text = sat
+            } else {
+                extraLayout.visibility = View.INVISIBLE
+            }
+            val alt = numberFormat.format(location.altitude) + getString(
+                R.string.string_accuracym
+            )
+            tvAltitude.text = alt
+            val maxSpeed =
+                getString(R.string.string_threedpoint).format(maxSpeed * multiplier) + " " + strUnits
+            tvMaxSpeed.text = maxSpeed
+            if (location.hasAltitude()) {
+                val accuracy = numberFormat.format(location.accuracy.toDouble()) + getString(
+                    R.string.string_accuracym
+                )
+                tvAccuracy.text = accuracy
+            } else {
+                tvAccuracy.text = getString(R.string.string_directionNil)
+            }
+            numberFormat.maximumFractionDigits = 0
+            if (location.hasBearing()) {
+                val bearing = location.bearing.toDouble()
+                var strDirection = getString(R.string.string_directionNil)
+                if (bearing < 20.0) {
+                    strDirection = getString(R.string.string_directionNorth)
+                } else if (bearing < 65.0) {
+                    strDirection = getString(R.string.string_directionNE)
+                } else if (bearing < 110.0) {
+                    strDirection = getString(R.string.string_directionE)
+                } else if (bearing < 155.0) {
+                    strDirection = getString(R.string.string_directionSE)
+                } else if (bearing < 200.0) {
+                    strDirection = getString(R.string.string_directionS)
+                } else if (bearing < 250.0) {
+                    strDirection = getString(R.string.string_directionSW)
+                } else if (bearing < 290.0) {
+                    strDirection = getString(R.string.string_directionW)
+                } else if (bearing < 345.0) {
+                    strDirection = getString(R.string.string_directionNW)
+                } else if (bearing < 361.0) {
+                    strDirection = getString(R.string.string_directionN)
+                }
+                tvDirection.text = strDirection
+            } else {
+                tvDirection.text = getString(R.string.string_directionNA)
+            }
+            val nf = NumberFormat.getInstance()
+            nf.maximumFractionDigits = 4
+            val lat = nf.format(location.latitude) + getString(R.string.string_lat)
+            tvLat.text = lat
+            val long = nf.format(location.longitude) + getString(R.string.string_longi)
+            tvLong.text = long
+
         }
     }
 
     private fun getCurrentAddress(location: Location) {
         val geocoder = Geocoder(applicationContext, Locale.getDefault())
-
-        if (geocoder != null) {
+        try {
             val addresses: List<Address> = geocoder.getFromLocation(
                 location.latitude,
                 location.longitude,
@@ -193,17 +225,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             val address: String =
                 addresses[0].getAddressLine(0)
             tvCurrentLocation.text = address
-        } else {
-            tvCurrentLocation.text = getString(R.string.offline_gps)
+        } catch (e: Exception) {
+            tvCurrentLocation.text = getString(R.string.string_offline_gps)
         }
-    }
-
-    private fun filter(prev: Float, curr: Float): Float {
-        // If first time through, initialise digital filter with current values
-        if (java.lang.Float.isNaN(prev)) return curr
-        // If current value is invalid, return previous filtered value
-        return if (java.lang.Float.isNaN(curr)) prev else (curr / 2 + prev * (1.0 - 1.0 / 2)).toFloat()
-        // Calculate new filtered value
     }
 
     private fun locationPermission() {
@@ -216,12 +240,20 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 }
                 permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
                     // Only approximate location access granted.
-                    Toast.makeText(this, getString(R.string.toastCourseLoc), Toast.LENGTH_LONG)
+                    Toast.makeText(
+                        this,
+                        getString(R.string.string_toastCourseLoc),
+                        Toast.LENGTH_LONG
+                    )
                         .show()
                 }
                 else -> {
                     // No location access granted.
-                    Toast.makeText(this, getString(R.string.toastNoPermission), Toast.LENGTH_LONG)
+                    Toast.makeText(
+                        this,
+                        getString(R.string.string_toastNoPermission),
+                        Toast.LENGTH_LONG
+                    )
                         .show()
 //                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
 //                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -242,7 +274,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         )
     }
 
-    @SuppressLint("SetTextI18n")
     @Throws(PackageManager.NameNotFoundException::class)
     private fun showDialog() {
         val dialog = AppCompatDialog(this)
@@ -250,10 +281,11 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val tvAppName: TextView? = dialog.findViewById(R.id.tvAppName)
         val tvDescription: TextView? = dialog.findViewById(R.id.tvDialogDes)
         if (tvAppName != null) {
-            tvAppName.text = getString(R.string.app_name) + " " + packageManager.getPackageInfo(
+            val appName = getString(R.string.app_name) + " " + packageManager.getPackageInfo(
                 packageName,
                 0
             ).versionName
+            tvAppName.text = appName
         }
         dialog.setTitle(
             "About Speedometer "
@@ -264,16 +296,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         dialog.show()
     }
 
-//    private fun isNetworkConnected(): Boolean {
-//        val cm = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-//        return cm.activeNetworkInfo != null && cm.activeNetworkInfo!!.isConnected
-//    }
-//
-//    @Throws(InterruptedException::class, IOException::class)
-//    fun isInternetAvailable(): Boolean {
-//        val command = "ping -c 1 google.com"
-//        return Runtime.getRuntime().exec(command).waitFor() == 0
-//    }
 
     private fun startService() {
         // check if the user has already granted
@@ -299,31 +321,29 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setUnitAndFont(preferences: SharedPreferences, key: String?) {
         if (key.equals(getString(R.string.key_unit_type))) {
             when (preferences.getString(getString(R.string.key_unit_type), "Km/h").toString()) {
-                getString(R.string.kmph) -> {
+                getString(R.string.string_kmph) -> {
                     multiplier = 3.6f
-                    strUnits = getString(R.string.kmph)
+                    strUnits = getString(R.string.string_kmph)
                 }
-                getString(R.string.mph) -> {
+                getString(R.string.string_mph) -> {
                     multiplier = 2.25f
-                    strUnits = getString(R.string.mph)
+                    strUnits = getString(R.string.string_mph)
                 }
-                getString(R.string.mps) -> {
+                getString(R.string.string_mps) -> {
                     multiplier = 1.0f
-                    strUnits = getString(R.string.mps)
+                    strUnits = getString(R.string.string_mps)
                 }
             }
             tvUnits.text = strUnits
-            getLocation()
         } else if (key.equals(getString(R.string.key_speed_font))) {
             val items = resources.getStringArray(R.array.speedFontAlias)
             var typeface: Typeface? = ResourcesCompat.getFont(this, R.font.texazgxxaq)
             when (preferences.getString(
                 getString(R.string.key_speed_font),
-                getString(R.string.defalut1)
+                getString(R.string.string_default1)
             ).toString()) {
                 items[0] -> {
                     typeface = ResourcesCompat.getFont(this, R.font.texazgxxaq)!!
@@ -348,21 +368,25 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 }
             }
             tvSpeed.typeface = typeface
+
         } else if (key.equals(getString(R.string.key_speed_color))) {
             val items = resources.getStringArray(R.array.speedColorAlias)
-            Log.e(
-                "SP",
-                preferences.getString(
-                    getString(R.string.key_speed_color),
-                    getString(R.string.defalut1)
-                ).toString()
-            )
             when (preferences.getString(
                 getString(R.string.key_speed_color),
-                getString(R.string.defalut1)
+                getString(R.string.string_default1)
             ).toString()) {
                 items[0] -> {
-                    tvSpeed.setTextColor(Color.parseColor(items[0]))
+                    // Get the primary text color of the theme
+                    val typedValue = TypedValue()
+                    theme.resolveAttribute(android.R.attr.textColorPrimary, typedValue, true)
+                    val arr: TypedArray = obtainStyledAttributes(
+                        typedValue.data, intArrayOf(
+                            android.R.attr.textColorPrimary
+                        )
+                    )
+                    val primaryColor = Integer.toHexString(arr.getColor(0, -1))
+                    arr.recycle()
+                    tvSpeed.setTextColor(Color.parseColor("#$primaryColor"))
                 }
                 items[1] -> {
                     tvSpeed.setTextColor(Color.parseColor(items[1]))
@@ -393,6 +417,20 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
             }
         }
+    }
 
+    override fun onPause() {
+        super.onPause()
+        locationManager.removeUpdates(listener)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getLocation()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        locationManager.removeUpdates(listener)
     }
 }

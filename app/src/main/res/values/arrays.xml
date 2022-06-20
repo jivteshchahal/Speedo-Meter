@@ -43,14 +43,14 @@
         <item>Default</item>
         <item>Green</item>
         <item>Red</item>
-        <item>White</item>
+        <item>Grey</item>
         <item>Yellow</item>
     </string-array>
     <string-array name="speedColorAlias" >
-        <item>#FFFFFF</item>
+        <item>default</item>
         <item>#00FF00</item>
         <item>#FF0000</item>
-        <item>#FFFFFF</item>
+        <item>#808080</item>
         <item>#FFFF00</item>
     </string-array>
     <array name="autosize_text_sizes">

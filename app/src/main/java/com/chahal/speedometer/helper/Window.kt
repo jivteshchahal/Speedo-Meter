@@ -15,16 +15,20 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import com.chahal.speedometer.R
+import com.chahal.speedometer.service.NewForegroundService
 import java.text.NumberFormat
 import java.util.*
 
 
 @SuppressLint("ClickableViewAccessibility", "InflateParams")
-class Window(val context: Service) {
+class Window(val context: Service, lifeCycleOwner: LifecycleOwner) {
     var speed = 0.0f
     private var maxSpeed = -100.0
-    private var locationManager: LocationManager? = null
+    private lateinit var locationManager: LocationManager
+    private lateinit var listener: LocationListener
     private var tvDirection: TextView
     private var tvUnits: TextView
     private var tvSpeed: TextView
@@ -34,7 +38,9 @@ class Window(val context: Service) {
     private var mParams: WindowManager.LayoutParams? = null
     private val mWindowManager: WindowManager
     private val layoutInflater: LayoutInflater
-//    private val MAX_CLICK_DURATION = 1000
+    private lateinit var loc: MutableLiveData<Location>
+
+    //    private val MAX_CLICK_DURATION = 1000
     private var startClickTime: Long = 0
     fun open() {
         try {
@@ -50,7 +56,7 @@ class Window(val context: Service) {
         }
     }
 
-     fun close() {
+    fun close() {
         try {
             // remove the view from the window
             (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).removeView(mView)
@@ -61,12 +67,14 @@ class Window(val context: Service) {
 
             // the above steps are necessary when you are adding and removing
             // the view simultaneously, it might give some exceptions
+            locationManager.removeUpdates(listener)
         } catch (e: Exception) {
             Log.d("Error2", e.toString())
         }
     }
 
     init {
+        loc = MutableLiveData<Location>()
         // set the layout parameters of the window
         mParams = WindowManager.LayoutParams( // Shrink the window to wrap the content rather
             // than filling the screen
@@ -85,7 +93,7 @@ class Window(val context: Service) {
         // the view from the window
 //        mView.findViewById<View>(R.id.fabSpeed).setOnClickListener { close() }
         tvSpeed = mView.findViewById(R.id.fabSpeed)
-        btnFabClose= mView.findViewById(R.id.btnFabClose)
+        btnFabClose = mView.findViewById(R.id.btnFabClose)
         tvUnits = mView.findViewById(R.id.fabUnits)
         tvDirection = mView.findViewById(R.id.fabDirection)
         // Define the position of the
@@ -139,61 +147,63 @@ class Window(val context: Service) {
                 }
             })
         getLocation()
+        observeLocation(lifeCycleOwner)
+    }
+
+    private fun observeLocation(lifeCycleOwner: LifecycleOwner) {
+        loc.observe(lifeCycleOwner) { location: Location ->
+            speed = location.speed
+            if (maxSpeed < speed) {
+                maxSpeed = speed.toDouble()
+            }
+            val numberFormat = NumberFormat.getNumberInstance()
+            numberFormat.maximumFractionDigits = 0
+            val strUnits = "Km/h"
+            tvUnits.text = strUnits
+            tvSpeed.text = numberFormat.format(speed.toDouble() * multiplier)
+            numberFormat.maximumFractionDigits = 0
+            if (location.hasBearing()) {
+                val bearing = location.bearing.toDouble()
+                var strDirection = context.getString(R.string.string_directionNil)
+                if (bearing < 20.0) {
+                    strDirection = context.getString(R.string.string_directionSNorth)
+                } else if (bearing < 65.0) {
+                    strDirection = context.getString(R.string.string_directionSNE)
+                } else if (bearing < 110.0) {
+                    strDirection = context.getString(R.string.string_directionSsE)
+                } else if (bearing < 155.0) {
+                    strDirection = context.getString(R.string.string_directionSSE)
+                } else if (bearing < 200.0) {
+                    strDirection = context.getString(R.string.string_directionSS)
+                } else if (bearing < 250.0) {
+                    strDirection = context.getString(R.string.string_directionSSW)
+                } else if (bearing < 290.0) {
+                    strDirection = context.getString(R.string.string_directionSsW)
+                } else if (bearing < 345.0) {
+                    strDirection = context.getString(R.string.string_directionSNW)
+                } else if (bearing < 361.0) {
+                    strDirection = context.getString(R.string.string_directionSN)
+                }
+                tvDirection.text = strDirection
+            } else {
+                tvDirection.text = context.getString(R.string.string_directionNA)
+            }
+            val nf = NumberFormat.getInstance()
+            nf.maximumFractionDigits = 4
+
+
+        }
     }
 
     private fun getLocation() {
-        locationManager = (context.getSystemService(Context.LOCATION_SERVICE) as LocationManager?)!!
-        val listener: LocationListener = object : LocationListener {
-            var fitSpeed = 0f
-            var localSpeed = 0f
-
-            @SuppressLint("SetTextI18n")
+        locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        listener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
-                speed = location.speed
-                if (maxSpeed < speed) {
-                    maxSpeed = speed.toDouble()
-                }
-                localSpeed = speed * multiplier
-                fitSpeed = filter(fitSpeed, localSpeed)
-                val numberFormat = NumberFormat.getNumberInstance()
-                numberFormat.maximumFractionDigits = 0
-                val strUnits = "Km/h"
-                tvUnits.text = strUnits
-                tvSpeed.text = numberFormat.format(speed.toDouble() * multiplier)
-
-                numberFormat.maximumFractionDigits = 0
-                if (location.hasBearing()) {
-                    val bearing = location.bearing.toDouble()
-                    var strDirection = context.getString(R.string.directionNil)
-                    if (bearing < 20.0) {
-                        strDirection = context.getString(R.string.directionSNorth)
-                    } else if (bearing < 65.0) {
-                        strDirection = context.getString(R.string.directionSNE)
-                    } else if (bearing < 110.0) {
-                        strDirection = context.getString(R.string.directionSsE)
-                    } else if (bearing < 155.0) {
-                        strDirection = context.getString(R.string.directionSSE)
-                    } else if (bearing < 200.0) {
-                        strDirection = context.getString(R.string.directionSS)
-                    } else if (bearing < 250.0) {
-                        strDirection = context.getString(R.string.directionSSW)
-                    } else if (bearing < 290.0) {
-                        strDirection = context.getString(R.string.directionSsW)
-                    } else if (bearing < 345.0) {
-                        strDirection = context.getString(R.string.directionSNW)
-                    } else if (bearing < 361.0) {
-                        strDirection = context.getString(R.string.directionSN)
-                    }
-                    tvDirection.text = strDirection
-                } else {
-                    tvDirection.text = context.getString(R.string.directionNA)
-                }
-                val nf = NumberFormat.getInstance()
-                nf.maximumFractionDigits = 4
+                loc.value = location
             }
 
             override fun onProviderEnabled(provider: String) {
-                tvSpeed.text = context.getString(R.string.providerStr)
+                tvSpeed.text = context.getString(R.string.string_providerStr)
             }
 
             override fun onProviderDisabled(provider: String) {
@@ -213,7 +223,7 @@ class Window(val context: Service) {
 //            locationPermission()
             return
         } else {
-            locationManager!!.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, listener)
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, listener)
         }
     }
 

@@ -14,7 +14,7 @@
             android:entries="@array/speedColor"
             android:entryValues="@array/speedColorAlias"
             app:key="@string/key_speed_color"
-            app:title="@string/speed_color" />
+            app:title="@string/string_speed_color" />
 
     </PreferenceCategory>
 
@@ -24,20 +24,13 @@
             app:key="@string/key_app_theme"
             app:title="@string/app_theme_dark" />
     </PreferenceCategory>
-    <PreferenceCategory app:title="@string/app_unit_type">
 
-        <ListPreference
-            android:entries="@array/unitType"
-            android:entryValues="@array/unitTypeAlias"
-            app:key="@string/key_unit_type"
-            app:title="@string/unit_type" />
-    </PreferenceCategory>
+
     <PreferenceCategory app:title="@string/speed_bubble_header">
 
         <SwitchPreferenceCompat
             app:key="@string/key_float_speed"
             app:title="@string/speed_bubble_header" />
-
     </PreferenceCategory>
 
 

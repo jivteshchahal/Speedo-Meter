@@ -38,7 +38,7 @@
     <dimen name="tvSplash_text_size_max">72sp</dimen>
     <dimen name="top_speedometer_text_max">72sp</dimen>
     <dimen name="tv_speed_max">700sp</dimen>
-    <dimen name="tv_speed_min">400sp</dimen>
-    <dimen name="tv_direction_min">20sp</dimen>
+    <dimen name="tv_speed_min">240sp</dimen>
+    <dimen name="tv_direction_min">22sp</dimen>
     <dimen name="tv_direction_max">24sp</dimen>
 </resources>
