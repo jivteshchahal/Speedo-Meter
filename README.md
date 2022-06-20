@@ -8,6 +8,8 @@ GPS Speedometer App (Online/Offline)
 ***Floating Speed***
 By using this app you can see your real driving speed. The app has various features.
 
+
+
 The app features include:
 1. Current Speed.
 2. Max Speed is recorded till reset button is hit.
