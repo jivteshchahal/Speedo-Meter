@@ -10,7 +10,6 @@ By using this app you can see your real driving speed. The app has various featu
 
 
 ![32G3uJ8DVtGH_1024_500](https://user-images.githubusercontent.com/19530416/174604813-5ee0c6b3-a383-4dc2-8f8a-3b3f4b62c482.png)
-![a](https://user-images.githubusercontent.com/19530416/174604818-ef6fe0d2-4522-4531-86a3-666d3e44e68b.png)
 
 The app features include:
 1. Current Speed.
