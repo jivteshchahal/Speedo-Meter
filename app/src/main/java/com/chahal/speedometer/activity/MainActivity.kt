@@ -27,7 +27,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
 import com.chahal.speedometer.R
 import com.chahal.speedometer.service.NewForegroundService
-import com.google.android.material.snackbar.Snackbar
 import java.text.NumberFormat
 import java.util.*
 
