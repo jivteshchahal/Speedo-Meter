@@ -9,6 +9,7 @@ import android.graphics.PixelFormat
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.ImageButton
@@ -38,7 +39,7 @@ class Window(val context: Service, lifeCycleOwner: LifecycleOwner) {
     private var mParams: WindowManager.LayoutParams? = null
     private val mWindowManager: WindowManager
     private val layoutInflater: LayoutInflater
-    private lateinit var loc: MutableLiveData<Location>
+    private var loc: MutableLiveData<Location> = MutableLiveData<Location>()
 
     //    private val MAX_CLICK_DURATION = 1000
     private var startClickTime: Long = 0
@@ -74,7 +75,6 @@ class Window(val context: Service, lifeCycleOwner: LifecycleOwner) {
     }
 
     init {
-        loc = MutableLiveData<Location>()
         // set the layout parameters of the window
         mParams = WindowManager.LayoutParams( // Shrink the window to wrap the content rather
             // than filling the screen
@@ -208,6 +208,8 @@ class Window(val context: Service, lifeCycleOwner: LifecycleOwner) {
 
             override fun onProviderDisabled(provider: String) {
             }
+            @Deprecated("Deprecated in Java")
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
         }
         if (ActivityCompat.checkSelfPermission(
                 context, Manifest.permission.ACCESS_FINE_LOCATION

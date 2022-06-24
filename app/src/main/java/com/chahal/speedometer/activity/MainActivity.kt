@@ -27,12 +27,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
 import com.chahal.speedometer.R
 import com.chahal.speedometer.service.NewForegroundService
+import com.google.android.material.snackbar.Snackbar
 import java.text.NumberFormat
 import java.util.*
 
 
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
-    var speed = 0.0f
+    private var speed = 0.0f
     private var maxSpeed = -100.0
     private lateinit var listener: LocationListener
     private lateinit var locationManager: LocationManager
@@ -51,7 +53,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private lateinit var btnSettings: ImageButton
     private lateinit var btnAboutMe: ImageButton
     private lateinit var loc: MutableLiveData<Location>
-    var multiplier = 3.6f
+    private var multiplier = 3.6f
     private lateinit var strUnits: String
     private lateinit var numberFormat: NumberFormat
     private lateinit var preferences: SharedPreferences
@@ -90,7 +92,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             startActivity(Intent(this, SettingsActivity::class.java))
         }
         btnAboutMe.setOnClickListener {
-
+            Toast.makeText(this,getString(R.string.string_coming_soon),Toast.LENGTH_SHORT).show()
         }
         btnReset.setOnClickListener {
             strUnits = getString(R.string.string_kmph)
@@ -120,6 +122,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
 
             override fun onProviderDisabled(provider: String) {
+            }
+
+            @Deprecated("Deprecated in Java")
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
             }
         }
         if (ActivityCompat.checkSelfPermission(
@@ -210,7 +216,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             tvLat.text = lat
             val long = nf.format(location.longitude) + getString(R.string.string_longi)
             tvLong.text = long
-
         }
     }
 
