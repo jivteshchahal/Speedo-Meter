@@ -347,27 +347,30 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             var typeface: Typeface? = ResourcesCompat.getFont(this, R.font.texazgxxaq)
             when (preferences.getString(
                 getString(R.string.key_speed_font),
-                getString(R.string.string_default1)
+                getString(R.string.string_digital)
             ).toString()) {
                 items[0] -> {
-                    typeface = ResourcesCompat.getFont(this, R.font.texazgxxaq)!!
+                    typeface = ResourcesCompat.getFont(this, R.font.digital)!!
                 }
                 items[1] -> {
-                    typeface = ResourcesCompat.getFont(this, R.font.harryp)!!
+                    typeface = ResourcesCompat.getFont(this, R.font.texazgxxaq)!!
                 }
                 items[2] -> {
-                    typeface = ResourcesCompat.getFont(this, R.font.grounsp7r)!!
+                    typeface = ResourcesCompat.getFont(this, R.font.harryp)!!
                 }
                 items[3] -> {
-                    typeface = ResourcesCompat.getFont(this, R.font.paintingwithchocolate5mo)!!
+                    typeface = ResourcesCompat.getFont(this, R.font.grounsp7r)!!
                 }
                 items[4] -> {
-                    typeface = ResourcesCompat.getFont(this, R.font.essentialarrangement3p)!!
+                    typeface = ResourcesCompat.getFont(this, R.font.paintingwithchocolate5mo)!!
                 }
                 items[5] -> {
-                    typeface = ResourcesCompat.getFont(this, R.font.essentialr)!!
+                    typeface = ResourcesCompat.getFont(this, R.font.essentialarrangement3p)!!
                 }
                 items[6] -> {
+                    typeface = ResourcesCompat.getFont(this, R.font.essentialr)!!
+                }
+                items[7] -> {
                     typeface = ResourcesCompat.getFont(this, R.font.essentialrrangementy3)!!
                 }
             }

@@ -1,5 +1,6 @@
 <resources>
     <string-array name="speedFont">
+        <item>Digital</item>
         <item>Texa</item>
         <item>Harry Potter</item>
         <item>Grouns</item>
@@ -10,7 +11,8 @@
     </string-array>
 
     <string-array name="speedFontAlias">
-        <item>default</item>
+        <item>digital</item>
+        <item>texa</item>
         <item>hp</item>
         <item>Grouns</item>
         <item>PWC</item>
@@ -48,7 +50,7 @@
     </string-array>
     <string-array name="speedColorAlias" >
         <item>default</item>
-        <item>#00FF00</item>
+        <item>#00ff67</item>
         <item>#FF0000</item>
         <item>#808080</item>
         <item>#FFFF00</item>

@@ -62,7 +62,7 @@
                 android:autoSizeMaxTextSize="@dimen/tv_speed_max"
                 android:autoSizeMinTextSize="@dimen/tv_speed_min"
                 android:autoSizeTextType="uniform"
-                android:fontFamily="@font/texazgxxaq"
+                android:fontFamily="@font/digital"
                 android:maxLines="1"
                 android:text="@string/string_100"
                 android:textAlignment="center"
@@ -72,7 +72,8 @@
                 app:layout_constraintBottom_toTopOf="@+id/tvCurrentLocation"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvSpeedometer" />
+                app:layout_constraintTop_toBottomOf="@+id/tvSpeedometer"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/tvUnits"
