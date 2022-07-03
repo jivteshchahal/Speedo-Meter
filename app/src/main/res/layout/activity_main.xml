@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:scrollbarStyle="insideInset"
     tools:context="com.chahal.speedometer.activity.MainActivity">
 
@@ -26,7 +27,7 @@
                 android:id="@+id/tvSpeedometer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/tvSpeedometer_margin_top"
+                android:layout_marginTop="16dp"
                 android:autoSizeMaxTextSize="@dimen/top_speedometer_text_max"
                 android:autoSizeMinTextSize="@dimen/top_speedometer_text_min"
                 android:autoSizeTextType="uniform"
@@ -44,16 +45,15 @@
                 android:id="@+id/btnAbout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/btnAbout_margin_start"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="5dp"
                 android:background="@mipmap/ic_launcher_round"
                 android:backgroundTintMode="screen"
                 android:contentDescription="@string/string_btn_about"
                 android:scaleType="fitStart"
                 android:visibility="visible"
-                app:layout_constraintBottom_toTopOf="@+id/tvSpeed"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvSpeedometer"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/tvSpeedometer" />
 
             <TextView
                 android:id="@+id/tvSpeed"
@@ -67,9 +67,8 @@
                 android:text="@string/string_100"
                 android:textAlignment="center"
                 android:textSize="@dimen/speed_text_size"
-                android:typeface="normal"
                 android:visibility="visible"
-                app:layout_constraintBottom_toTopOf="@+id/tvCurrentLocation"
+                app:layout_constraintBottom_toTopOf="@+id/tvUnits"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvSpeedometer"
@@ -87,21 +86,36 @@
                 android:visibility="visible"
                 app:layout_constraintBottom_toTopOf="@+id/tvCurrentLocation"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvSpeed" />
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                ads:adSize="BANNER"
+                ads:adUnitId="@string/banner_ad_unit_id"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvCurrentLocation" />
 
             <TextView
                 android:id="@+id/tvCurrentLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/tvCurrentLocation_margin_bottom"
                 android:maxLines="2"
                 android:text="@string/string_current_location"
                 android:textAlignment="center"
                 android:textSize="@dimen/location_text_size"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/adView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvSpeed" />
+                app:layout_constraintTop_toBottomOf="@+id/tvUnits" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -164,6 +178,7 @@
                 android:maxLines="1"
                 android:autoSizeMinTextSize="@dimen/tv_direction_min"
                 android:autoSizeMaxTextSize="@dimen/tv_direction_max"
+                android:autoSizeTextType="uniform"
                 android:text="@string/string_direction"
                 android:textAlignment="textStart"
                 android:textSize="@dimen/direction_text_size"

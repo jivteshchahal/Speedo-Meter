@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -21,6 +22,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SpeedoMeter"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4556038061649547~6011131502"/>
+
         <activity
             android:name=".activity.AboutActivity"
             android:exported="false" />
@@ -54,6 +59,7 @@
             android:screenOrientation="userPortrait"
             android:theme="@style/Theme.SpeedoMeter"
             android:turnScreenOn="true"
+            android:hardwareAccelerated="true"
             tools:ignore="LockedOrientationActivity" />
     </application>
 

@@ -10,6 +10,8 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.location.*
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.util.TypedValue
@@ -26,9 +28,14 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
 import com.chahal.speedometer.R
+import com.chahal.speedometer.helper.NetworkCheck
 import com.chahal.speedometer.service.NewForegroundService
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 import java.text.NumberFormat
 import java.util.*
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
 
 @Suppress("DEPRECATION")
@@ -75,6 +82,11 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         btnAbout = findViewById(R.id.btnAbout)
         btnSettings = findViewById(R.id.btnSettings)
         btnAboutMe = findViewById(R.id.btnAboutMe)
+        NetworkCheck(this).observe(this){
+            if(it){
+                createAds()
+            }
+        }
         loc = MutableLiveData<Location>()
         getLocation()
         numberFormat = NumberFormat.getNumberInstance()
@@ -103,6 +115,31 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             showDialog()
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
+    private fun createAds() {
+        val executor: Executor = Executors.newSingleThreadExecutor()
+        val handler = Handler(Looper.getMainLooper())
+        executor.execute {
+            val result: R
+            try {
+                // perform task asynchronously
+                // you can also execute runnable or callable
+                handler.post {
+                    // update the result to the UI thread
+                    // or any operation you want to perform on UI thread. It is similar to onPostExecute() of AsyncTask
+                    val mAdView: AdView = findViewById(R.id.adView)
+                    val adRequest: AdRequest = AdRequest.Builder().build()
+                    mAdView.loadAd(adRequest)
+                    Log.e("Main Activity","Ads running")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                handler.post { // update error to UI thread or handle }
+                    Log.e("Main Activity","Problem with ads")
+                }
+            }
+        }
     }
 
 
@@ -433,7 +470,11 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onResume() {
         super.onResume()
-        getLocation()
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q){
+            getLocation()
+        } else{
+            Toast.makeText(this,"Please restart the app",Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun onDestroy() {
