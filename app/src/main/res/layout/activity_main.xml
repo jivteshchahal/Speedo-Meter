@@ -401,7 +401,7 @@
                 android:textSize="@dimen/reset_button_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btnSettings"
-                app:layout_constraintStart_toEndOf="@+id/btnAboutMe"
+                app:layout_constraintStart_toEndOf="@+id/btnHUD"
                 app:layout_constraintTop_toBottomOf="@+id/btnRadioGroup" />
 
             <ImageButton
@@ -416,15 +416,15 @@
                 app:layout_constraintTop_toBottomOf="@+id/btnRadioGroup"
                 app:srcCompat="@android:drawable/ic_menu_preferences" />
 
-            <ImageButton
-                android:id="@+id/btnAboutMe"
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/btnHUD"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:text="@string/string_hud"
                 app:layout_constraintEnd_toStartOf="@+id/btnReset"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btnRadioGroup"
-                app:srcCompat="@android:drawable/ic_menu_recent_history"
                 tools:ignore="ContentDescription" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

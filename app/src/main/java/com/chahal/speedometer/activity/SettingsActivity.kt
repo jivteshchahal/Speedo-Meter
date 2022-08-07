@@ -1,7 +1,6 @@
 package com.chahal.speedometer.activity
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.ListPreference
 import androidx.preference.Preference
@@ -32,18 +31,18 @@ class SettingsActivity : AppCompatActivity() {
         }
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
-//            val mListPreference = preferenceManager.findPreference<Preference>(getString(R.string.key_unit_type)) as ListPreference?
-//            if (mListPreference!!.value == null) {
-//                // to ensure we don't get a null value
-//                // set first value by default
-//                mListPreference.setValueIndex(0)
-//            }
-//            mListPreference.onPreferenceChangeListener =
-//                Preference.OnPreferenceChangeListener { _, newValue ->
-//                    mListPreference.setValueIndex(mListPreference.findIndexOfValue(newValue.toString()))
-//                    mListPreference.value = newValue as String?
-//                    false
-//                }
+            val mListPreference = preferenceManager.findPreference<Preference>(getString(R.string.key_unit_type)) as ListPreference?
+            if (mListPreference!!.value == null) {
+                // to ensure we don't get a null value
+                // set first value by default
+                mListPreference.setValueIndex(0)
+            }
+            mListPreference.onPreferenceChangeListener =
+                Preference.OnPreferenceChangeListener { _, newValue ->
+                    mListPreference.setValueIndex(mListPreference.findIndexOfValue(newValue.toString()))
+                    mListPreference.value = newValue as String?
+                    false
+                }
             val mListPreference1 =
                 preferenceManager.findPreference<Preference>(getString(R.string.key_speed_font)) as ListPreference?
             if (mListPreference1!!.value == null) {

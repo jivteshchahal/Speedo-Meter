@@ -132,7 +132,7 @@ The following definitions shall have the same meaning regardless of whether they
     <string name="string_accuracy1">Accuracy:</string>
     <string name="string_current_location">Current Location</string>
     <string name="string_100">0</string>
-    <string name="string_unit_type">Unit type</string>
+    <string name="string_unit_type">Unit Type</string>
     <string name="string_threedpoint">%.3f</string>
     <string name="string_dialog_internet">No Internet Connection Available. Address might not be available. Tap to close</string>
     <string name="string_btn_about">about</string>
@@ -142,6 +142,7 @@ The following definitions shall have the same meaning regardless of whether they
     <string name="string_coming_soon">Coming Soon</string>
     <string name="string_digital">digital</string>
     <string name="banner_ad_unit_id">ca-app-pub-4556038061649547/7471321322</string>
+    <string name="string_hud">HUD</string>
     <!-- Preference Titles -->
 
     <!-- Messages Preferences -->

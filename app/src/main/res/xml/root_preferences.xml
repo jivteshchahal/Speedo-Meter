@@ -15,6 +15,11 @@
             android:entryValues="@array/speedColorAlias"
             app:key="@string/key_speed_color"
             app:title="@string/string_speed_color" />
+        <ListPreference
+            android:entries="@array/unitType"
+            android:entryValues="@array/unitTypeAlias"
+            app:key="@string/key_unit_type"
+            app:title="@string/string_unit_type" />
 
     </PreferenceCategory>
 

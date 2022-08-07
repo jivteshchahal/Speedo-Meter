@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.TypedArray
 import android.graphics.Color
@@ -22,6 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDialog
+import androidx.appcompat.widget.SwitchCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.res.ResourcesCompat
@@ -57,7 +59,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private lateinit var btnReset: Button
     private lateinit var btnAbout: ImageButton
     private lateinit var btnSettings: ImageButton
-    private lateinit var btnAboutMe: ImageButton
+    private lateinit var btnHUD: SwitchCompat
     private lateinit var loc: MutableLiveData<Location>
     private var multiplier = 3.6f
     private lateinit var strUnits: String
@@ -81,7 +83,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         btnReset = findViewById(R.id.btnReset)
         btnAbout = findViewById(R.id.btnAbout)
         btnSettings = findViewById(R.id.btnSettings)
-        btnAboutMe = findViewById(R.id.btnAboutMe)
+        btnHUD = findViewById(R.id.btnHUD)
         NetworkCheck(this).observe(this){
             if(it){
                 createAds()
@@ -102,9 +104,32 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         btnSettings.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
-        btnAboutMe.setOnClickListener {
-            Toast.makeText(this,getString(R.string.string_coming_soon),Toast.LENGTH_SHORT).show()
+        btnHUD.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                // The toggle is enabled
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                tvLat.scaleY = -1f
+                tvLong.scaleY = -1f
+                tvSpeed.scaleY = -1f
+                tvMaxSpeed.scaleY = -1f
+                tvAltitude.scaleY = -1f
+                tvDirection.scaleY = -1f
+                btnHUD.scaleY = -1f
+                tvUnits.scaleY = -1f
+            } else {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
+                // The toggle is disabled
+                tvLat.scaleY = 1f
+                tvLong.scaleY = 1f
+                tvSpeed.scaleY = 1f
+                tvMaxSpeed.scaleY = 1f
+                tvAltitude.scaleY = 1f
+                tvDirection.scaleY = 1f
+                btnHUD.scaleY = 1f
+                tvUnits.scaleY = 1f
+            }
         }
+
         btnReset.setOnClickListener {
             strUnits = getString(R.string.string_kmph)
             speed = 0.0f
@@ -121,7 +146,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val executor: Executor = Executors.newSingleThreadExecutor()
         val handler = Handler(Looper.getMainLooper())
         executor.execute {
-            val result: R
+//            val result: R
             try {
                 // perform task asynchronously
                 // you can also execute runnable or callable
@@ -184,75 +209,94 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun observeLocation() {
-        loc.observe(this) { location: Location ->
-            speed = location.speed
-            getCurrentAddress(location)
-            if (maxSpeed < speed) {
-                maxSpeed = speed.toDouble()
-            }
-            tvUnits.text = strUnits
-            val newSpeed = numberFormat.format(speed.toDouble() * multiplier).toString()
-            tvSpeed.text = newSpeed
-            val extraLayout = findViewById<ConstraintLayout>(R.id.extrasLayout)
-            if (location.extras != null) {
-                extraLayout.visibility = View.VISIBLE
-                val sat = location.extras.getInt(getString(R.string.key_extras_sat))
-                    .toString() + getString(
-                    R.string.string_sat
-                )
-                tvExtras.text = sat
-            } else {
-                extraLayout.visibility = View.INVISIBLE
-            }
-            val alt = numberFormat.format(location.altitude) + getString(
-                R.string.string_accuracym
-            )
-            tvAltitude.text = alt
-            val maxSpeed =
-                getString(R.string.string_threedpoint).format(maxSpeed * multiplier) + " " + strUnits
-            tvMaxSpeed.text = maxSpeed
-            if (location.hasAltitude()) {
-                val accuracy = numberFormat.format(location.accuracy.toDouble()) + getString(
-                    R.string.string_accuracym
-                )
-                tvAccuracy.text = accuracy
-            } else {
-                tvAccuracy.text = getString(R.string.string_directionNil)
-            }
-            numberFormat.maximumFractionDigits = 0
-            if (location.hasBearing()) {
-                val bearing = location.bearing.toDouble()
-                var strDirection = getString(R.string.string_directionNil)
-                if (bearing < 20.0) {
-                    strDirection = getString(R.string.string_directionNorth)
-                } else if (bearing < 65.0) {
-                    strDirection = getString(R.string.string_directionNE)
-                } else if (bearing < 110.0) {
-                    strDirection = getString(R.string.string_directionE)
-                } else if (bearing < 155.0) {
-                    strDirection = getString(R.string.string_directionSE)
-                } else if (bearing < 200.0) {
-                    strDirection = getString(R.string.string_directionS)
-                } else if (bearing < 250.0) {
-                    strDirection = getString(R.string.string_directionSW)
-                } else if (bearing < 290.0) {
-                    strDirection = getString(R.string.string_directionW)
-                } else if (bearing < 345.0) {
-                    strDirection = getString(R.string.string_directionNW)
-                } else if (bearing < 361.0) {
-                    strDirection = getString(R.string.string_directionN)
+        val executor: Executor = Executors.newSingleThreadExecutor()
+        val handler = Handler(Looper.getMainLooper())
+        executor.execute {
+//            val result: R
+            try {
+                // perform task asynchronously
+                // you can also execute runnable or callable
+                handler.post {
+                    // update the result to the UI thread
+                    // or any operation you want to perform on UI thread. It is similar to onPostExecute() of AsyncTask
+                    loc.observe(this) { location: Location ->
+                        speed = location.speed
+                        getCurrentAddress(location)
+                        if (maxSpeed < speed) {
+                            maxSpeed = speed.toDouble()
+                        }
+                        tvUnits.text = strUnits
+                        val newSpeed = numberFormat.format(speed.toDouble() * multiplier).toString()
+                        tvSpeed.text = newSpeed
+                        val extraLayout = findViewById<ConstraintLayout>(R.id.extrasLayout)
+                        if (location.extras != null) {
+                            extraLayout.visibility = View.VISIBLE
+                            val sat = location.extras.getInt(getString(R.string.key_extras_sat))
+                                .toString() + getString(
+                                R.string.string_sat
+                            )
+                            tvExtras.text = sat
+                        } else {
+                            extraLayout.visibility = View.INVISIBLE
+                        }
+                        val alt = numberFormat.format(location.altitude) + getString(
+                            R.string.string_accuracym
+                        )
+                        tvAltitude.text = alt
+                        val maxSpeed =
+                            getString(R.string.string_threedpoint).format(maxSpeed * multiplier) + " " + strUnits
+                        tvMaxSpeed.text = maxSpeed
+                        if (location.hasAltitude()) {
+                            val accuracy = numberFormat.format(location.accuracy.toDouble()) + getString(
+                                R.string.string_accuracym
+                            )
+                            tvAccuracy.text = accuracy
+                        } else {
+                            tvAccuracy.text = getString(R.string.string_directionNil)
+                        }
+                        numberFormat.maximumFractionDigits = 0
+                        if (location.hasBearing()) {
+                            val bearing = location.bearing.toDouble()
+                            var strDirection = getString(R.string.string_directionNil)
+                            if (bearing < 20.0) {
+                                strDirection = getString(R.string.string_directionNorth)
+                            } else if (bearing < 65.0) {
+                                strDirection = getString(R.string.string_directionNE)
+                            } else if (bearing < 110.0) {
+                                strDirection = getString(R.string.string_directionE)
+                            } else if (bearing < 155.0) {
+                                strDirection = getString(R.string.string_directionSE)
+                            } else if (bearing < 200.0) {
+                                strDirection = getString(R.string.string_directionS)
+                            } else if (bearing < 250.0) {
+                                strDirection = getString(R.string.string_directionSW)
+                            } else if (bearing < 290.0) {
+                                strDirection = getString(R.string.string_directionW)
+                            } else if (bearing < 345.0) {
+                                strDirection = getString(R.string.string_directionNW)
+                            } else if (bearing < 361.0) {
+                                strDirection = getString(R.string.string_directionN)
+                            }
+                            tvDirection.text = strDirection
+                        } else {
+                            tvDirection.text = getString(R.string.string_directionNA)
+                        }
+                        val nf = NumberFormat.getInstance()
+                        nf.maximumFractionDigits = 4
+                        val lat = nf.format(location.latitude) + getString(R.string.string_lat)
+                        tvLat.text = lat
+                        val long = nf.format(location.longitude) + getString(R.string.string_longi)
+                        tvLong.text = long
+                    }
                 }
-                tvDirection.text = strDirection
-            } else {
-                tvDirection.text = getString(R.string.string_directionNA)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                handler.post { // update error to UI thread or handle }
+                    Log.e("Main Activity","Problem with ads")
+                }
             }
-            val nf = NumberFormat.getInstance()
-            nf.maximumFractionDigits = 4
-            val lat = nf.format(location.latitude) + getString(R.string.string_lat)
-            tvLat.text = lat
-            val long = nf.format(location.longitude) + getString(R.string.string_longi)
-            tvLong.text = long
         }
+
     }
 
     private fun getCurrentAddress(location: Location) {
