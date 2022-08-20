@@ -18,15 +18,15 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
+import androidx.preference.PreferenceManager
 import com.chahal.speedometer.R
-import com.chahal.speedometer.service.NewForegroundService
 import java.text.NumberFormat
 import java.util.*
 
 
 @SuppressLint("ClickableViewAccessibility", "InflateParams")
 class Window(val context: Service, lifeCycleOwner: LifecycleOwner) {
-    var speed = 0.0f
+    private var speed = 0.0f
     private var maxSpeed = -100.0
     private lateinit var locationManager: LocationManager
     private lateinit var listener: LocationListener
@@ -34,7 +34,8 @@ class Window(val context: Service, lifeCycleOwner: LifecycleOwner) {
     private var tvUnits: TextView
     private var tvSpeed: TextView
     private var btnFabClose: ImageButton
-    var multiplier = 3.6f
+    private var multiplier = 3.6f
+    private lateinit var strUnits: String
     private val mView: View
     private var mParams: WindowManager.LayoutParams? = null
     private val mWindowManager: WindowManager
@@ -158,7 +159,21 @@ class Window(val context: Service, lifeCycleOwner: LifecycleOwner) {
             }
             val numberFormat = NumberFormat.getNumberInstance()
             numberFormat.maximumFractionDigits = 0
-            val strUnits = "Km/h"
+            val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+            when (preferences.getString(context.getString(R.string.key_unit_type), "Km/h").toString()) {
+                context.getString(R.string.string_kmph) -> {
+                    multiplier = 3.6f
+                    strUnits = context.getString(R.string.string_kmph)
+                }
+                context.getString(R.string.string_mph) -> {
+                    multiplier = 2.25f
+                    strUnits = context.getString(R.string.string_mph)
+                }
+                context.getString(R.string.string_mps) -> {
+                    multiplier = 1.0f
+                    strUnits = context.getString(R.string.string_mps)
+                }
+            }
             tvUnits.text = strUnits
             tvSpeed.text = numberFormat.format(speed.toDouble() * multiplier)
             numberFormat.maximumFractionDigits = 0
@@ -190,8 +205,6 @@ class Window(val context: Service, lifeCycleOwner: LifecycleOwner) {
             }
             val nf = NumberFormat.getInstance()
             nf.maximumFractionDigits = 4
-
-
         }
     }
 
@@ -227,13 +240,5 @@ class Window(val context: Service, lifeCycleOwner: LifecycleOwner) {
         } else {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, listener)
         }
-    }
-
-    private fun filter(prev: Float, curr: Float): Float {
-        // If first time through, initialise digital filter with current values
-        if (java.lang.Float.isNaN(prev)) return curr
-        // If current value is invalid, return previous filtered value
-        return if (java.lang.Float.isNaN(curr)) prev else (curr / 2 + prev * (1.0 - 1.0 / 2)).toFloat()
-        // Calculate new filtered value
     }
 }
