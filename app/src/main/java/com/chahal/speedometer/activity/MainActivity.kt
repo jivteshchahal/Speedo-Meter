@@ -30,6 +30,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
 import com.chahal.speedometer.R
+import com.chahal.speedometer.helper.AnalogSpeedView
 import com.chahal.speedometer.helper.NetworkCheck
 import com.chahal.speedometer.service.NewForegroundService
 import com.google.android.gms.ads.AdRequest
@@ -65,6 +66,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private lateinit var strUnits: String
     private lateinit var numberFormat: NumberFormat
     private lateinit var preferences: SharedPreferences
+    private lateinit var asv:AnalogSpeedView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,9 +86,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         btnAbout = findViewById(R.id.btnAbout)
         btnSettings = findViewById(R.id.btnSettings)
         btnHUD = findViewById(R.id.btnHUD)
+//        asv = findViewById<AnalogSpeedView>(R.id.arcProgress)
         NetworkCheck(this).observe(this){
             if(it){
-                createAds()
+//                createAds()
             }
         }
         loc = MutableLiveData<Location>()
@@ -209,6 +212,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun observeLocation() {
+        val analogSpeedView: AnalogSpeedView = AnalogSpeedView(applicationContext)
         val executor: Executor = Executors.newSingleThreadExecutor()
         val handler = Handler(Looper.getMainLooper())
         executor.execute {
@@ -227,11 +231,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                         }
                         tvUnits.text = strUnits
                         val newSpeed = numberFormat.format(speed.toDouble() * multiplier).toString()
+
                         tvSpeed.text = newSpeed
+//                        asv.setData(180, newSpeed.toInt(),"1")
                         val extraLayout = findViewById<ConstraintLayout>(R.id.extrasLayout)
                         if (location.extras != null) {
                             extraLayout.visibility = View.VISIBLE
-                            val sat = location.extras.getInt(getString(R.string.key_extras_sat))
+                            val sat = location.extras!!.getInt(getString(R.string.key_extras_sat))
                                 .toString() + getString(
                                 R.string.string_sat
                             )
@@ -306,7 +312,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 location.latitude,
                 location.longitude,
                 1
-            )
+            ) as List<Address>
             val address: String =
                 addresses[0].getAddressLine(0)
             tvCurrentLocation.text = address

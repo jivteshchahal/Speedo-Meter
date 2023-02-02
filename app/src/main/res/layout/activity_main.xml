@@ -3,6 +3,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
@@ -74,6 +75,23 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvSpeedometer"
                 tools:visibility="visible" />
 
+            <com.chahal.speedometer.helper.AnalogSpeedView
+                android:id="@+id/arcProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/tvSpeed"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="@+id/tvSpeed"
+                app:layout_constraintStart_toStartOf="@+id/tvSpeed"
+                app:layout_constraintTop_toTopOf="@+id/tvSpeed"
+                app:layout_constraintWidth_default="percent"
+                app:layout_constraintWidth_percent="0.9"
+                custom:borderColor="@color/arcUnfinishedColor"
+                custom:borderSize="8dp"
+                custom:fillColor="@color/arcFinishedColor"
+                custom:maxSpeed="190" />
+
             <TextView
                 android:id="@+id/tvUnits"
                 android:layout_width="0dp"
@@ -90,19 +108,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvSpeed" />
 
-            <com.google.android.gms.ads.AdView
-                android:id="@+id/adView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
-                ads:adSize="BANNER"
-                ads:adUnitId="@string/banner_ad_unit_id"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvCurrentLocation" />
+<!--            <com.google.android.gms.ads.AdView-->
+<!--                android:id="@+id/adView"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_alignParentBottom="true"-->
+<!--                android:layout_centerHorizontal="true"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                ads:adSize="BANNER"-->
+<!--                ads:adUnitId="@string/banner_ad_unit_id"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/tvCurrentLocation" />-->
 
             <TextView
                 android:id="@+id/tvCurrentLocation"
@@ -112,7 +130,6 @@
                 android:text="@string/string_current_location"
                 android:textAlignment="center"
                 android:textSize="@dimen/location_text_size"
-                app:layout_constraintBottom_toTopOf="@+id/adView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvUnits" />
@@ -130,7 +147,7 @@
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 android:maxLines="1"
